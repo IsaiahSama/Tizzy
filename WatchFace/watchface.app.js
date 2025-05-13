@@ -1,11 +1,11 @@
-// require("Font7x11Numeric7Seg").add(Graphics);
+//require("Font7x11Numeric7Seg").add(Graphics);
 let drawTimeout;
 
 const start = () => {
 	g.clear(1);
 
 	draw();
-}
+};
 
 const queueDraw = () => {
 	if (drawTimeout)
@@ -15,7 +15,7 @@ const queueDraw = () => {
 		drawTimeout = undefined;
 		draw();
 	}, 60000 - (Date.now() % 60000));
-}
+};
 
 const draw = () => {
 	// Setting up state
@@ -35,24 +35,24 @@ const draw = () => {
 
 	// Preparing to draw
 
-	g.clear(1);
+	g.reset();
 
 	// Drawing time
-	//g.clearRect(0, y - 25, w, y+25);
+	g.clearRect(0, y - 25, w, y + 25);
 	//g.setFontAlign(0, 0).setFont("Font7x11Numeric7Seg:4");
-	g.setFontAlign(0, 0).setFont("Vector", 60);
-	g.drawString(time, x + 20, y);
+	g.setFontAlign(0, 0).setFont("Vector", 50);
+	g.drawString(time, x + 15, y);
 
 	// Drawing Date
 	y += 40;
 	//g.clearRect(0, y -4, w, y + 4);
-	g.setFontAlign(0, 0).setFont("Vector", 20);
+	g.setFontAlign(0, 0).setFont("Vector", 24);
 	g.drawString(date, x, y);
 
 	// Drawing day of week
 	y += 30;
 	//g.clearRect(0, y - 4, w, y + 4);
-	g.setFontAlign(0, 0).setFont("Vector", 17);
+	g.setFontAlign(0, 0).setFont("Vector", 20);
 	g.drawString(day, x, y);
 
 	queueDraw();
