@@ -34,26 +34,30 @@ const draw = () => {
 	let day = require("locale").dow(d);
 
 	// Preparing to draw
-
 	g.reset();
+	g.setBgColor(0, 0, 0);
+	g.clearRect(0, 0, w, h);
 
 	// Drawing time
 	g.clearRect(0, y - 25, w, y + 25);
-	//g.setFontAlign(0, 0).setFont("Font7x11Numeric7Seg:4");
+	g.setColor(1, 1, 1);
 	g.setFontAlign(0, 0).setFont("Vector", 50);
-	g.drawString(time, x + 15, y);
+	g.drawString(time, x + 15, y, true);
 
 	// Drawing Date
 	y += 40;
-	//g.clearRect(0, y -4, w, y + 4);
-	g.setFontAlign(0, 0).setFont("Vector", 24);
-	g.drawString(date, x, y);
+	g.clearRect(0, y - 15, w, y + 15);
+	//g.setColor(0x8a61c2);
+	g.setColor(1, 0, 1);
+	g.setFontAlign(0, 0).setFont("Vector", 18);
+	g.drawString(date, x, y, true);
 
 	// Drawing day of week
 	y += 30;
-	//g.clearRect(0, y - 4, w, y + 4);
-	g.setFontAlign(0, 0).setFont("Vector", 20);
-	g.drawString(day, x, y);
+	g.clearRect(0, y - 10, w, y + 10);
+	g.setColor(1, 1, 1);
+	g.setFontAlign(0, 0).setFont("Vector", 18);
+	g.drawString(day, x, y, true);
 
 	queueDraw();
 };
