@@ -1,16 +1,14 @@
-//require("Font7x11Numeric7Seg").add(Graphics);
 let drawTimeout;
-let state = "clock";
+let clockState = true;
 
 const getImage = () => {
-	//return require("heatshrink").decompress(atob("mEwwkBiIA4iBABHqQVCAAYZPOhItPD44xLCwINIBRQlDBagjBNRgwIQpolIFxomJWh4nHFxwQHIx5AHfaApGFyASGC6xeRLQsQLyATFC48AG4QDDC5xOBHgIDDC5AKHCYIADBg4X/C6CLCAAaPGC5QwEBZDXKFxLXMYIgXTdpAXGBpghGBIYXIABISEC7A+IKBAXEMBJeMJCQQGJB5AHJB4nIGBrQKGBglKgAYKBZYwBEZAKKBoibHThwPBAA77QAAjKODIwVSAE4A=="));
-
 	return require("Storage").read("sample.img");
-}
+};
 
 
-const changeState = (newState) => {
-	return newState;
+const toggleClockState = () => {
+	clockState = !clockState;
+	return clockState;
 };
 
 const start = () => {
@@ -29,6 +27,15 @@ const queueDraw = () => {
 	}, 60000 - (Date.now() % 60000));
 };
 
+const handleDrag = (event) => {
+	if (event.b != 0) {
+		return;
+	}
+
+	toggleClockState();
+	draw();
+};
+
 const drawClock = (w, h) => {
 	let x = w / 2;
 	let y = h * 0.4;
@@ -44,7 +51,7 @@ const drawClock = (w, h) => {
 	// Preparing to draw
 	g.reset();
 	g.setBgColor(0, 0, 0);
-	g.clearRect(0, 0, w, h);
+	g.clearRect(0, 25, w, h);
 
 	// Drawing time
 	g.clearRect(0, y - 25, w, y + 25);
@@ -55,7 +62,6 @@ const drawClock = (w, h) => {
 	// Drawing Date
 	y += 40;
 	g.clearRect(0, y - 15, w, y + 15);
-	//g.setColor(0x8a61c2);
 	g.setColor(1, 0, 1);
 	g.setFontAlign(0, 0).setFont("Vector", 18);
 	g.drawString(date, x, y, true);
@@ -69,8 +75,9 @@ const drawClock = (w, h) => {
 };
 
 const drawUs = (w, h) => {
+	g.clearRect(0, 25, w, h);
+	g.reset();
 	g.drawImage(getImage(), 0, 24, { scale: 3.8 });
-	//Terminal.println("I exist");
 };
 
 const draw = () => {
@@ -79,7 +86,7 @@ const draw = () => {
 	let w = g.getWidth();
 	let h = g.getHeight();
 
-	if (state == "clock") {
+	if (clockState) {
 		drawClock(w, h);
 	} else {
 		drawUs(w, h);
@@ -87,6 +94,8 @@ const draw = () => {
 
 	queueDraw();
 };
+
+Bangle.on("drag", handleDrag);
 
 start();
 
