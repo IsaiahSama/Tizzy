@@ -1,5 +1,17 @@
 //require("Font7x11Numeric7Seg").add(Graphics);
 let drawTimeout;
+let state = "clock";
+
+const getImage = () => {
+	//return require("heatshrink").decompress(atob("mEwwkBiIA4iBABHqQVCAAYZPOhItPD44xLCwINIBRQlDBagjBNRgwIQpolIFxomJWh4nHFxwQHIx5AHfaApGFyASGC6xeRLQsQLyATFC48AG4QDDC5xOBHgIDDC5AKHCYIADBg4X/C6CLCAAaPGC5QwEBZDXKFxLXMYIgXTdpAXGBpghGBIYXIABISEC7A+IKBAXEMBJeMJCQQGJB5AHJB4nIGBrQKGBglKgAYKBZYwBEZAKKBoibHThwPBAA77QAAjKODIwVSAE4A=="));
+
+	return require("Storage").read("sample.img");
+}
+
+
+const changeState = (newState) => {
+	return newState;
+};
 
 const start = () => {
 	g.clear(1);
@@ -17,11 +29,7 @@ const queueDraw = () => {
 	}, 60000 - (Date.now() % 60000));
 };
 
-const draw = () => {
-	// Setting up state
-
-	let w = g.getWidth();
-	let h = g.getHeight();
+const drawClock = (w, h) => {
 	let x = w / 2;
 	let y = h * 0.4;
 
@@ -58,6 +66,24 @@ const draw = () => {
 	g.setColor(1, 1, 1);
 	g.setFontAlign(0, 0).setFont("Vector", 18);
 	g.drawString(day, x, y, true);
+};
+
+const drawUs = (w, h) => {
+	g.drawImage(getImage(), 0, 24, { scale: 3.8 });
+	//Terminal.println("I exist");
+};
+
+const draw = () => {
+	// Setting up state
+
+	let w = g.getWidth();
+	let h = g.getHeight();
+
+	if (state == "clock") {
+		drawClock(w, h);
+	} else {
+		drawUs(w, h);
+	}
 
 	queueDraw();
 };
