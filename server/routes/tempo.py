@@ -22,7 +22,7 @@ async def tempo_endpoint(websocket: WebSocket):
             if data.isnumeric():
                 await manager.send_tempo(data, websocket)
             else:
-                await manager.reply("Invalid message")
+                await manager.reply("Invalid message", websocket)
     except WebSocketDisconnect:
         manager.disconnect(websocket)
         await manager.broadcast("Partner Disconnected!")
