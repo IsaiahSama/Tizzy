@@ -2,7 +2,11 @@
 
 from fastapi import APIRouter
 from starlette.websockets import WebSocket, WebSocketDisconnect
-from server.utils import ConnectionManager
+
+try:
+    from server.utils import ConnectionManager
+except ImportError:
+    from utils import ConnectionManager
 
 manager = ConnectionManager()
 
