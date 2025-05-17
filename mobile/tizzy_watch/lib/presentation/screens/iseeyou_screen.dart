@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tizzy_watch/presentation/widgets/app_bar.dart';
+
 
 class ISeeYouScreen extends ConsumerWidget {
   const ISeeYouScreen({super.key});
@@ -7,9 +9,7 @@ class ISeeYouScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ISeeYou Screen'),
-      ),
+      appBar: MyAppBar(title: "I See You"),
       body: const Center(
         child: Text('This is the ISeeYou screen'),
       ),
