@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tizzy_watch/presentation/widgets/app_bar.dart';
 import 'package:tizzy_watch/presentation/widgets/app_drawer.dart';
+import 'package:tizzy_watch/presentation/widgets/presence_indicator.dart';
+import 'package:tizzy_watch/presentation/widgets/presence_indicator_info.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -11,7 +13,17 @@ class HomeScreen extends ConsumerWidget {
     return Scaffold(
       appBar: MyAppBar(title: "Home"),
       drawer: AppDrawer(),
-      body: const Center(child: Text('This is the home screen')),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: const [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [PresenceIndicator(), PresenceIndicatorInfo()],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
