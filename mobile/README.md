@@ -15,3 +15,7 @@ The apps that will be supported are:
 - Tempo
 - ISeeYou
 
+Tizzy will also provide access to a simple chat interface called TizzChat.
+
+The wireframe for this project is located in the `wireframe.png` image located in this folder.
+More information will be provided in `./tizzy_watch/README.md`.
