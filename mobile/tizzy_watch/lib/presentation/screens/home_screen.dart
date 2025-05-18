@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tizzy_watch/presentation/widgets/app_bar.dart';
 import 'package:tizzy_watch/presentation/widgets/app_drawer.dart';
-import 'package:tizzy_watch/presentation/widgets/heart.dart';
-import 'package:tizzy_watch/presentation/widgets/presence_indicator.dart';
-import 'package:tizzy_watch/presentation/widgets/presence_indicator_info.dart';
-import 'package:tizzy_watch/presentation/widgets/watch_stats.dart';
+import 'package:tizzy_watch/presentation/widgets/home/heart.dart';
+import 'package:tizzy_watch/presentation/widgets/home/presence_indicator.dart';
+import 'package:tizzy_watch/presentation/widgets/home/presence_indicator_info.dart';
+import 'package:tizzy_watch/presentation/widgets/home/watch_stats.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
