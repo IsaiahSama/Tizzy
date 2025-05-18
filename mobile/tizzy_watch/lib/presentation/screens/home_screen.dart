@@ -4,6 +4,7 @@ import 'package:tizzy_watch/presentation/widgets/app_bar.dart';
 import 'package:tizzy_watch/presentation/widgets/app_drawer.dart';
 import 'package:tizzy_watch/presentation/widgets/presence_indicator.dart';
 import 'package:tizzy_watch/presentation/widgets/presence_indicator_info.dart';
+import 'package:tizzy_watch/presentation/widgets/watch_stats.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -16,11 +17,12 @@ class HomeScreen extends ConsumerWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
-          children: const [
+          children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [PresenceIndicator(), PresenceIndicatorInfo()],
             ),
+            WatchStats(),
           ],
         ),
       ),
