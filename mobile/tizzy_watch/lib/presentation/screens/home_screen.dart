@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tizzy_watch/presentation/widgets/app_bar.dart';
 import 'package:tizzy_watch/presentation/widgets/app_drawer.dart';
+import 'package:tizzy_watch/presentation/widgets/heart.dart';
 import 'package:tizzy_watch/presentation/widgets/presence_indicator.dart';
 import 'package:tizzy_watch/presentation/widgets/presence_indicator_info.dart';
 import 'package:tizzy_watch/presentation/widgets/watch_stats.dart';
@@ -15,13 +16,15 @@ class HomeScreen extends ConsumerWidget {
       appBar: MyAppBar(title: "Home"),
       drawer: AppDrawer(),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(12.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [PresenceIndicator(), PresenceIndicatorInfo()],
             ),
+            Heart(),
             WatchStats(),
           ],
         ),
