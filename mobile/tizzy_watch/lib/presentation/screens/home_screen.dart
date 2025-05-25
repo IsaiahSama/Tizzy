@@ -25,6 +25,23 @@ class HomeScreen extends ConsumerWidget {
               children: [PresenceIndicator(), PresenceIndicatorInfo()],
             ),
             Heart(),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter a message',
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text('Send'),
+                ),
+              ],
+            ),
             WatchStats(),
           ],
         ),
