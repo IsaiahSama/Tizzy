@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:tizzy_watch/application/gadget_bridge_service.dart";
 import "package:tizzy_watch/domain/entities/tempo_message.dart";
 
 class TempoMessageWidget extends StatelessWidget {
@@ -15,7 +16,9 @@ class TempoMessageWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
-        onPressed: () {},
+        onPressed: () async{
+          await GadgetBridgeService.sendTempoMesssage(message);
+        },
         child: Text(message.content, style: const TextStyle(color: Colors.white, fontSize: 20)),
       ),
     );

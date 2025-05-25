@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tizzy_watch/application/gadget_bridge_service.dart';
 import 'package:tizzy_watch/presentation/widgets/app_bar.dart';
 import 'package:tizzy_watch/presentation/widgets/app_drawer.dart';
 import 'package:tizzy_watch/domain/entities/tempo_message.dart';
@@ -50,9 +51,9 @@ class TempoScreen extends ConsumerWidget {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
-                  // Add button press handling logic here
-                  String value = ref.read(customTextProvider.notifier).state;
+                onPressed: () async {
+                  TempoMessage msg = TempoMessage(content: ref.read(customTextProvider.notifier).state, color: Colors.purple);
+                  await GadgetBridgeService.sendTempoMesssage(msg);
                 },
                 child: Text('Send Message'),
               ),
