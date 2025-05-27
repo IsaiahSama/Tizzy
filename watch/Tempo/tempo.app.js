@@ -3,6 +3,9 @@ let currentMessage = null;
 const displayTempo = (data) => {
     let newMessage = data.message;
     currentMessage = newMessage;
+
+    Bangle.buzz(1000);
+
 };
 
 const drawTempo = () => {
@@ -12,13 +15,13 @@ const drawTempo = () => {
     let x = w / 2;
     let y = h / 2;
 
-    g.reset();
-
-    g.setFont("Vector", 23).setFontAlign(0, 0);
-
     let message = currentMessage ?? "???";
 
-    g.drawString(message, x, y);
+    // g.reset();
+    // g.setFont("Vector", 23).setFontAlign(0, 0);
+    // g.drawString(message, x, y);
+
+    E.showMessage(message, "Tizzy");
 };
 
 const draw = () => {
