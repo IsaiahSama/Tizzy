@@ -4,6 +4,7 @@ const STATES = {
 };
 
 let currentState = STATES.WATCH;
+let currentStateIndex = 0;
 
 let validStates = ["watch", "tempo"];
 
@@ -21,7 +22,9 @@ const handleDrag = (event) => {
 		return;
 	}
 
-	// do something
+	// Change to the next subsequent state
+	currentStateIndex = (currentStateIndex + 1) % validStates.length;
+	changeState(validStates[currentStateIndex]);
 };
 
 const queueDraw = (delay) => {
