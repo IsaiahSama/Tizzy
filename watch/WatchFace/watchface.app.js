@@ -26,9 +26,7 @@ const clockLayout = new Layout({
 
 clockLayout.update();
 
-const drawClock = (w, h) => {
-	let x = w / 2;
-	let y = h * 0.4;
+const drawClock = () => {
 
 	let d = new Date();
 	let clock = require("locale").time(d, 1);
@@ -46,16 +44,10 @@ const drawClock = (w, h) => {
 	g.setBgColor(0, 0, 0);
 
 	clockLayout.render();
-
 };
 
 const draw = () => {
-	// Setting up state
-
-	let w = g.getWidth();
-	let h = g.getHeight();
-
-	drawClock(w, h);
+	drawClock();
 
 	queueDraw();
 };
