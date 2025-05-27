@@ -77,6 +77,7 @@ const displayTempo = (data) => { // Function called from Phone
 
 	let newMessage = data.message;
 	currentMessage = newMessage;
+    Bangle.buzz(1000);
 
 	changeState(STATES.TEMPO);
 	draw(); // Trigger draw
