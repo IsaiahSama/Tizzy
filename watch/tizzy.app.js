@@ -114,7 +114,7 @@ Bangle.on("drag", handleDrag);
 
 draw();
 
-// Bangle.setUI("clock");
+Bangle.setUI("clock");
 
 Bangle.loadWidgets();
 Bangle.drawWidgets();
