@@ -86,9 +86,10 @@ const drawTempo = () => {
 	let message = currentMessage ?? "???";
 	const tempoLayout = new Layout(
 		{
-			type: "txt", font: "6x8", label: "X XXXX XXXX", id: "tempo"
+			type: "txt", font: "Vector:24", label: message, id: "tempo"
 		}
 	);
+
 	tempoLayout.update();
 
 	tempoLayout.render();
