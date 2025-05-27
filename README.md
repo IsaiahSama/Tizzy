@@ -15,7 +15,7 @@ Where:
 - Mobile Application is the mobile application used to intergrate and facilitate communication between the watches and the server.
 
 ## Watch Applications
-
+The various watch applications, will be accessible through one file called `tizzy.app.js`, which will provide a scrolling feature to reach the other code.
 Apps located here include:
 
 - ClockFace: Our custom Clock Application

@@ -1,19 +1,7 @@
 let drawTimeout;
-let clockState = true;
-
-const getImage = () => {
-	return require("Storage").read("sample.img");
-};
-
-
-const toggleClockState = () => {
-	clockState = !clockState;
-	return clockState;
-};
 
 const start = () => {
 	g.clear(1);
-
 	draw();
 };
 
@@ -21,19 +9,10 @@ const queueDraw = () => {
 	if (drawTimeout)
 		clearTimeout(drawTimeout);
 
-	drawTimeout = setTimeout(function() {
+	drawTimeout = setTimeout(function () {
 		drawTimeout = undefined;
 		draw();
 	}, 60000 - (Date.now() % 60000));
-};
-
-const handleDrag = (event) => {
-	if (event.b != 0) {
-		return;
-	}
-
-	toggleClockState();
-	draw();
 };
 
 const drawClock = (w, h) => {
@@ -74,28 +53,16 @@ const drawClock = (w, h) => {
 	g.drawString(day, x, y, true);
 };
 
-const drawUs = (w, h) => {
-	g.clearRect(0, 25, w, h);
-	g.reset();
-	g.drawImage(getImage(), 0, 24, { scale: 3.8 });
-};
-
 const draw = () => {
 	// Setting up state
 
 	let w = g.getWidth();
 	let h = g.getHeight();
 
-	if (clockState) {
-		drawClock(w, h);
-	} else {
-		drawUs(w, h);
-	}
+	drawClock(w, h);
 
 	queueDraw();
 };
-
-Bangle.on("drag", handleDrag);
 
 start();
 
