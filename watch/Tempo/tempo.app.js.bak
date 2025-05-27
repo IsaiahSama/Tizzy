@@ -1,11 +1,29 @@
+const STATES = {
+    DISPLAY: "display",
+    SEND: "send",
+};
+
+let validStates = ["display", "send"];
+
+let currentState = null;
 let currentMessage = null;
+
+const changeState = (newState) => {
+    if (!validStates.includes(newState)) {
+        Terminal.println("Invalid state!");
+        return;
+    }
+    currentState = newState;
+};
 
 const displayTempo = (data) => {
     let newMessage = data.message;
     currentMessage = newMessage;
+
+    changeState(STATES.DISPLAY);
 };
 
-const drawTempo = () => {
+const drawDisplayState = () => {
     let w = g.getWidth();
     let h = g.getHeight();
 
@@ -24,10 +42,17 @@ const drawTempo = () => {
 const draw = () => {
     // Draw based on current state
     g.clearRect(Bangle.appRect);
-    drawTempo();
+
+    if (currentState == STATES.DISPLAY) {
+        drawDisplayState();
+    } else {
+        g.drawString("Not Display State", 20, 50, 1);
+    }
 };
 
 g.clear(1);
+
+changeState(STATES.SEND);
 
 setInterval(draw, 1000);
 
