@@ -1,3 +1,4 @@
+const Layout = require("Layout");
 let drawTimeout;
 
 const start = () => {
@@ -15,6 +16,16 @@ const queueDraw = () => {
 	}, 60000 - (Date.now() % 60000));
 };
 
+const clockLayout = new Layout({
+	type: "v", c: [
+		{ type: "txt", font: "Vector:50", label: "12:00 XX", id: "time" },
+		{ type: "txt", font: "6x8:2", label: "XXX XX XXXX", id: "date" },
+		{ type: "txt", font: "6x8:3", label: "XXXXXXXXX", id: "dow" }
+	]
+}, { lazy: true });
+
+clockLayout.update();
+
 const drawClock = (w, h) => {
 	let x = w / 2;
 	let y = h * 0.4;
@@ -27,30 +38,15 @@ const drawClock = (w, h) => {
 	let date = require("locale").date(d);
 	let day = require("locale").dow(d);
 
+	clockLayout.time.label = time;
+	clockLayout.date.label = date;
+	clockLayout.dow.label = day;
+
 	// Preparing to draw
-	g.reset();
 	g.setBgColor(0, 0, 0);
-	g.clearRect(0, 25, w, h);
 
-	// Drawing time
-	g.clearRect(0, y - 25, w, y + 25);
-	g.setColor(1, 1, 1);
-	g.setFontAlign(0, 0).setFont("Vector", 50);
-	g.drawString(time, x + 15, y, true);
+	clockLayout.render();
 
-	// Drawing Date
-	y += 40;
-	g.clearRect(0, y - 15, w, y + 15);
-	g.setColor(1, 0, 1);
-	g.setFontAlign(0, 0).setFont("Vector", 18);
-	g.drawString(date, x, y, true);
-
-	// Drawing day of week
-	y += 30;
-	g.clearRect(0, y - 10, w, y + 10);
-	g.setColor(1, 1, 1);
-	g.setFontAlign(0, 0).setFont("Vector", 18);
-	g.drawString(day, x, y, true);
 };
 
 const draw = () => {
