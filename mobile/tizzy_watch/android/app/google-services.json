@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "793927070836",
+    "project_id": "tizzy-1c996",
+    "storage_bucket": "tizzy-1c996.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:793927070836:android:79d333bc8514a03a8d0d21",
+        "android_client_info": {
+          "package_name": "com.example.tizzy_watch"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3PblEDWsVHsWuWblGD0IToNTzGy_wNRI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
