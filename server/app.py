@@ -1,5 +1,5 @@
-from fastapi import FastAPI
 import ssl
+from fastapi import FastAPI
 
 try:
     from server.routes import tempo
