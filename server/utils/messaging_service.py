@@ -9,6 +9,7 @@ class MessagingService:
         notification = messaging.Notification(
             title="Tizzy!",
             body="You've been Tizzed!",
+            image="https://github.com/IsaiahSama/LoveWatch/blob/main/assets/tizzy_logo.png"
         )
         
         message = messaging.Message(
