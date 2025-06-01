@@ -55,4 +55,24 @@ static Future<void> sendTempoMesssage(TempoMessage) async {}
 
 This method accepts a custom defined TempoMessage object, which it will the turn into an appropriately formatted `Map<String, dynamic>`, then call `sendToBangle` with the correct function name, and formatted data arguments.
 
+## Notifications
 
+This app will support receiving messages from Firebase messaging. This will be used for when sending information from one partner to the next. Notifcations will be used to trigger data sharing from the phone to the watch, for example, when calling Tempo.
+
+The following applications will have notifications sent for them:
+
+- Tempo
+
+### Tempo Notifications
+
+Tempo notifications are notifications which will be sent from one phone to the other, with the intention of calling the `displayTempo` method on the watch, to alert the partner of a message received.
+
+These will have the following `data` format:
+
+```json
+{
+    "type": "tempo",
+    "message": "some message",
+    "color": "some color",
+}
+```
