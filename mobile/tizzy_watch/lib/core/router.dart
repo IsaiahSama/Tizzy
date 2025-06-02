@@ -6,6 +6,7 @@ import 'package:tizzy_watch/presentation/screens/iseeyou_screen.dart';
 import 'package:tizzy_watch/presentation/screens/register_screen.dart';
 import 'package:tizzy_watch/presentation/screens/tempo_screen.dart';
 import 'package:tizzy_watch/presentation/screens/tizzchat_screen.dart';
+import 'package:tizzy_watch/presentation/screens/profile_screen.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/',
@@ -26,6 +27,7 @@ final GoRouter router = GoRouter(
   },
   routes: [
     GoRoute(name: 'Home', path: '/', builder: (context, state) => HomeScreen()),
+    GoRoute(name: 'Profile', path: '/profile', builder: (context, state) => ProfileScreen()),
     GoRoute(name: 'Register', path: '/register', builder: (context, state) => RegisterScreen()),
     GoRoute(
       name: 'Tempo',

@@ -18,6 +18,12 @@ class AppDrawer extends StatelessWidget {
                 style: TextStyle(color: Colors.white, fontSize: 34)),
           ),
           ListTile(
+            title: const Text('Profile'),
+            onTap: () {
+              context.goNamed('Profile');
+            },
+          ),
+          ListTile(
             title: Text('Home'),
             onTap: () {
               context.goNamed('Home');
