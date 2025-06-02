@@ -37,7 +37,7 @@ const queueDraw = (delay) => {
 	if (drawTimeout)
 		clearTimeout(drawTimeout);
 
-	drawTimeout = setTimeout(function () {
+	drawTimeout = setTimeout(function() {
 		drawTimeout = undefined;
 		draw();
 	}, delay);
@@ -48,7 +48,7 @@ const queueDraw = (delay) => {
 const drawWatch = () => {
 	let clockLayout = new Layout({
 		type: "v", c: [
-			{ type: "txt", font: "Vector:50", label: "12:00 XX", id: "time" },
+			{ type: "txt", font: "Vector:50", label: "77:77", id: "time" },
 			{ type: "txt", font: "6x8:2", label: "XXX XX XXXX", id: "date" },
 			{ type: "txt", font: "6x8:3", label: "XXXXXXXXX", id: "dow" }
 		]
@@ -56,9 +56,7 @@ const drawWatch = () => {
 	clockLayout.update();
 
 	let d = new Date();
-	let clock = require("locale").time(d, 1);
-	let meridian = require("locale").meridian(d);
-	let time = clock + " " + meridian;
+	let time = require("locale").time(d, 1);
 
 	let date = require("locale").date(d);
 	let day = require("locale").dow(d);
@@ -77,7 +75,7 @@ const displayTempo = (data) => { // Function called from Phone
 
 	let newMessage = data.message;
 	currentMessage = newMessage;
-    Bangle.buzz(1000);
+	Bangle.buzz(1000);
 
 	changeState(STATES.TEMPO);
 	setTimeout(() => {
