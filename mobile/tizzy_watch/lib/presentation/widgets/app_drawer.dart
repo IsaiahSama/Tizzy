@@ -12,10 +12,13 @@ class AppDrawer extends StatelessWidget {
         children: [
           const DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Colors.deepPurple,
             ),
-            child: Text('Tizzy Watch Applications',
-                style: TextStyle(color: Colors.white, fontSize: 34)),
+            child: Padding(
+              padding: EdgeInsets.only(top: 10.0),
+              child: Text('Tizzy Apps',
+                  style: TextStyle(color: Colors.white, fontSize: 34)),
+            ),
           ),
           ListTile(
             title: const Text('Profile'),

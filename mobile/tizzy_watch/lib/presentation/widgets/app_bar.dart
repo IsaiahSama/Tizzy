@@ -15,7 +15,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(title),
       centerTitle: true,
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.deepPurple,
+      foregroundColor: Colors.white,
       actions: [IconButton(onPressed: () async{
         await AuthService.clearUser();
         if(context.mounted) context.go('/register');
