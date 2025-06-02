@@ -2,5 +2,6 @@
   "id":"tizz",
   "name":"Tizzy!",
   "src":"tizzy.app.js",
-  "icon": "tizzy_logo_48x.jpg"
+  "icon": "tizzy_logo_48x.jpg",
+  "type": "clock"
 }
