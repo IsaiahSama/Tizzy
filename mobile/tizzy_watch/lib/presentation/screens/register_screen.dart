@@ -25,59 +25,76 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             Text('Register to get Tizzied', style: TextStyle(fontSize: 20)),
             SizedBox(height: 20),
-            Row(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
                   "Know your partner's ID?",
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Enter Companion ID',
-                  ),
-                  onChanged: (text) {
-                    setState(() {
-                      companionID = text;
-                    });
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 350,
+                      child: Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Enter Companion ID',
+                            ),
+                            onChanged: (text) {
+                              setState(() {
+                                companionID = text;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await _registerUser("boy");
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                    ),
-                    child: Text(
-                      "I'm the Boy!",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await _registerUser("girl");
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.pink,
-                    ),
-                    child: Text(
-                      "I'm the Girl!",
-                      style: TextStyle(color: Colors.white),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await _registerUser("boy");
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                      ),
+                      child: Text(
+                        "I'm the Boy!",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await _registerUser("girl");
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.pink,
+                      ),
+                      child: Text(
+                        "I'm the Girl!",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

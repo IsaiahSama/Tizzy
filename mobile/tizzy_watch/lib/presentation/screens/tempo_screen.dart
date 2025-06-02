@@ -8,15 +8,29 @@ import 'package:tizzy_watch/domain/entities/tempo_message.dart';
 import 'package:tizzy_watch/presentation/widgets/tempo/tempo_message_widget.dart';
 import "package:tizzy_watch/core/auth.dart";
 
-
 List<TempoMessage> messages = [
-  TempoMessage(message: "Tempo", color: Colors.red),
-  TempoMessage(message: "I miss you!", color: Colors.green),
+  TempoMessage(
+    message: "Tempo",
+    color: const Color.fromARGB(255, 141, 32, 188),
+  ),
+  TempoMessage(
+    message: "I miss you!",
+    color: const Color.fromARGB(255, 184, 27, 184),
+  ),
   TempoMessage(message: "Checkin in~", color: Colors.blue),
-  TempoMessage(message: "Stay Safe", color: Colors.orange),
-  TempoMessage(message: "Check Phone!", color: Colors.purple),
-  TempoMessage(message: "Call?", color: Colors.yellow),
-  TempoMessage(message: "I want you!", color: Colors.pink),
+  TempoMessage(
+    message: "Stay Safe",
+    color: const Color.fromARGB(255, 0, 163, 163),
+  ),
+  TempoMessage(
+    message: "Check Phone!",
+    color: const Color.fromARGB(255, 23, 164, 61),
+  ),
+  TempoMessage(message: "Call?", color: const Color.fromARGB(255, 218, 125, 4)),
+  TempoMessage(
+    message: "I want you!",
+    color: const Color.fromARGB(255, 227, 31, 77),
+  ),
 ];
 
 final customTextProvider = StateProvider<String>((ref) => '');
@@ -29,43 +43,62 @@ class TempoScreen extends ConsumerWidget {
     return Scaffold(
       appBar: MyAppBar(title: "Tempo"),
       drawer: AppDrawer(),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children:[
-          Text('Quick! Send a message!'),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: messages.length,
-            itemBuilder: (context, index) => TempoMessageWidget(message: messages[index]),
-          ),
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Enter custom message',
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 25.0, 8.0, 8.0),
+              child: Text('Quick! Send a message!', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),),
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: messages.length,
+              itemBuilder:
+                  (context, index) =>
+                      TempoMessageWidget(message: messages[index]),
+            ),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8.0, 30.0, 8.0, 15.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Enter custom message',
+                    ),
+                    onChanged: (text) {
+                      ref.read(customTextProvider.notifier).state = text;
+                    },
                   ),
-                  onChanged: (text) {
-                    ref.read(customTextProvider.notifier).state = text;
-                  },
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  TempoMessage msg = TempoMessage(message: ref.read(customTextProvider.notifier).state, color: Colors.purple);
-                  // await GadgetBridgeService.sendTempoMesssage(msg);
-                  final formData = FormData.fromMap({"message": msg.message, "sender_id": await AuthService.getDeviceID(), "color": "blue"});
-                  await ref.read(dioProvider).post("/tempo/notify", data: formData);
-
-                },
-                child: Text('Send Message'),
-              ),
-            ],
-          ),
-        ]
-      )
+                ElevatedButton(
+                  style: ButtonStyle(
+                    foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
+                    backgroundColor: WidgetStateProperty.all<Color>(Colors.deepPurple),
+                  ),
+                  onPressed: () async {
+                    TempoMessage msg = TempoMessage(
+                      message: ref.read(customTextProvider.notifier).state,
+                      color: Colors.purple,
+                    );
+                    // await GadgetBridgeService.sendTempoMesssage(msg);
+                    final formData = FormData.fromMap({
+                      "message": msg.message,
+                      "sender_id": await AuthService.getDeviceID(),
+                      "color": "blue",
+                    });
+                    await ref
+                        .read(dioProvider)
+                        .post("/tempo/notify", data: formData);
+                  },
+                  child: Text('Send Message'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
