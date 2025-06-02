@@ -32,7 +32,7 @@ class UploadDeviceModel(BaseModel):
     device_id: str
     fcm_key: str
 
-@app.get("/register") 
+@app.post("/register") 
 async def register(data: Annotated[UploadDeviceModel, Form()]):
     result: OperationStatus = await client.register_device(data.device_id, data.fcm_key)
     return JSONResponse(content={"message": result.reason}, status_code=result.status_code)
@@ -45,10 +45,10 @@ class CompanionModel(BaseModel):
     
     device_id: str
     fcm_key: str
-    companion_fcm_key: str
+    companion_id: str
     
 @app.post("/companion")
 async def register_companion(data: Annotated[CompanionModel, Form()]):
-    result: OperationStatus = await client.register_companion(data.device_id, data.fcm_key, data.companion_fcm_key)
+    result: OperationStatus = await client.register_companion(data.device_id, data.fcm_key, data.companion_id)
     return JSONResponse(content={"message": result.reason}, status_code=result.status_code)
 

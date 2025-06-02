@@ -21,7 +21,7 @@ class MongoClient:
 
     client: AsyncIOMotorClient[Any]
 
-    db_name: str = "BajanInsiderMongoDB"
+    db_name: str = "TizzyDB"
     users_table: str = "users"
     companions_table: str = "companions"
 
@@ -46,17 +46,20 @@ class MongoClient:
         await self.users_db.insert_one({"device_id": device_id, "fcm_key": fcm_key})
         return OperationStatus(200, "Device registered successfully.")
     
-    async def register_companion(self, device_id: str, fcm_key: str, companion_fcm_key: str) -> OperationStatus:
-        companion = await self.users_db.find_one({"fcm_key": companion_fcm_key})
+    async def register_companion(self, device_id: str, fcm_key: str, companion_id: str) -> OperationStatus:
+        companion = await self.users_db.find_one({"device_id": companion_id})
+        
         if companion is None:
             return OperationStatus(404, "Device not found.")
+        
         sender = await self.users_db.find_one({"device_id": device_id, "fcm_key": fcm_key})
+        
         if sender is None:
             await self.register_device(device_id, fcm_key)
-            
-        if (await self.companions_db.find_one({"$or": [{"partner_1": companion_fcm_key}, {"partner_2": companion_fcm_key}]}) is not None):
+
+        if (await self.companions_db.find_one({"$or": [{"partner_1": companion_id}, {"partner_2": companion_id}]}) is not None):
             return OperationStatus(409, "Companion already registered. Find your own!")
-            
-        await self.companions_db.insert_one({"partner_1": companion_fcm_key, "partner_2": fcm_key})
+
+        await self.companions_db.insert_one({"partner_1": companion_id, "partner_2": device_id})
         return OperationStatus(200, "Companion registered successfully.")
-        
+
