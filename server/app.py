@@ -17,6 +17,11 @@ app = FastAPI()
 
 app.include_router(tempo.router)
 
+
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
+
 @app.get("/ping") # This suffices as a health check
 async def ping():
     return {"message": "pong"}
