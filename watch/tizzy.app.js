@@ -80,6 +80,9 @@ const displayTempo = (data) => { // Function called from Phone
     Bangle.buzz(1000);
 
 	changeState(STATES.TEMPO);
+	setTimeout(() => {
+		changeState(STATES.WATCH);
+	}, 5000);
 	draw(); // Trigger draw
 };
 
