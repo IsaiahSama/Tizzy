@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tizzy_watch/core/client.dart';
@@ -5,6 +6,7 @@ import 'package:tizzy_watch/presentation/widgets/app_bar.dart';
 import 'package:tizzy_watch/presentation/widgets/app_drawer.dart';
 import 'package:tizzy_watch/domain/entities/tempo_message.dart';
 import 'package:tizzy_watch/presentation/widgets/tempo/tempo_message_widget.dart';
+import "package:tizzy_watch/core/auth.dart";
 
 
 List<TempoMessage> messages = [
@@ -54,7 +56,8 @@ class TempoScreen extends ConsumerWidget {
                 onPressed: () async {
                   TempoMessage msg = TempoMessage(message: ref.read(customTextProvider.notifier).state, color: Colors.purple);
                   // await GadgetBridgeService.sendTempoMesssage(msg);
-                  await ref.read(dioProvider).post("/notify", data: {"message": msg.message});
+                  final formData = FormData.fromMap({"message": msg.message, "sender_id": await AuthService.getDeviceID(), "color": "blue"});
+                  await ref.read(dioProvider).post("/notify", data: formData);
 
                 },
                 child: Text('Send Message'),
