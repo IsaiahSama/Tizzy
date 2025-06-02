@@ -52,3 +52,7 @@ async def register_companion(data: Annotated[CompanionModel, Form()]):
     result: OperationStatus = await client.register_companion(data.device_id, data.fcm_key, data.companion_id)
     return JSONResponse(content={"message": result.reason}, status_code=result.status_code)
 
+@app.post("/delete")
+async def delete_self(data: Annotated[UploadDeviceModel, Form()]):
+    result: OperationStatus = await client.delete_device(data.device_id, data.fcm_key)
+    return JSONResponse(content={"message": result.reason}, status_code=result.status_code)

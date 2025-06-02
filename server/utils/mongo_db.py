@@ -62,4 +62,10 @@ class MongoClient:
 
         await self.companions_db.insert_one({"partner_1": companion_id, "partner_2": device_id})
         return OperationStatus(200, "Companion registered successfully.")
+    
+    async def delete_device(self, device_id: str, fcm_key: str) -> OperationStatus:
+        if await self.users_db.find_one({"device_id": device_id, "fcm_key": fcm_key}) is None:
+            return OperationStatus(404, "Device not found.")
+        await self.users_db.delete_one({"device_id": device_id, "fcm_key": fcm_key})
+        return OperationStatus(200, "Device deleted successfully.")
 

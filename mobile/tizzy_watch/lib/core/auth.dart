@@ -2,6 +2,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizzy_watch/core/constants.dart';
 import 'package:uuid/uuid.dart';
+import 'package:dio/dio.dart';
+
+final serverURL = "http://172.20.6.49:8000";
 
 class AuthService {
   static Future<bool> userRegistered() async {
@@ -27,6 +30,10 @@ class AuthService {
     await asyncPrefs.setString(deviceIDKey, deviceID);
     await asyncPrefs.setString(fcmTokenKey, fcmToken);
     await asyncPrefs.setString(genderKey, gender);
+
+    final formData = FormData.fromMap({"device_id": deviceID, "fcm_key": fcmToken});
+
+    await Dio().post("$serverURL/register", data: formData);
   }
 
   static Future<String?> getDeviceID() async {
@@ -49,8 +56,10 @@ class AuthService {
 
   static Future<void> clearUser() async {
     final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
-    await asyncPrefs.remove(deviceIDKey);
-    await asyncPrefs.remove(fcmTokenKey);
-    await asyncPrefs.remove(genderKey);
+
+    final formData = FormData.fromMap({"device_id": await asyncPrefs.getString(deviceIDKey), "fcm_key": await asyncPrefs.getString(fcmTokenKey)});
+    await Dio().post("$serverURL/delete", data: formData);
+
+    await asyncPrefs.clear();
   }
 }
