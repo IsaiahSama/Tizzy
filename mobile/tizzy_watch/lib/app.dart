@@ -1,7 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tizzy_watch/application/gadget_bridge_service.dart';
 import "package:tizzy_watch/core/router.dart";
+import 'package:tizzy_watch/domain/entities/tempo_message.dart';
 
 class MainApp extends ConsumerStatefulWidget {
   const MainApp({super.key});
@@ -28,8 +30,9 @@ class _MainAppState extends ConsumerState<MainApp> {
   }
 
   void _handleMessage(RemoteMessage message) {
+    print("FCM Message: ${message.data}");
     if (message.data['type'] == 'tempo') {
-      print(message.data['message']);
+      GadgetBridgeService.sendTempoMesssage(TempoMessage(message: message.data['message']));
     }
   }
 

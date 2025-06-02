@@ -19,7 +19,7 @@ class AuthService {
     final deviceID = Uuid().v1();
 
     FirebaseMessaging messaging = FirebaseMessaging.instance;
-    NotificationSettings _ = await messaging.requestPermission(provisional: true);
+    NotificationSettings _ = await messaging.requestPermission(provisional: false);
 
     final fcmToken = await FirebaseMessaging.instance.getToken();
 

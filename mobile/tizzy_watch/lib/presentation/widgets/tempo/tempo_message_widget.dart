@@ -1,5 +1,7 @@
+import "package:dio/dio.dart";
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:tizzy_watch/core/auth.dart";
 import "package:tizzy_watch/core/client.dart";
 import "package:tizzy_watch/domain/entities/tempo_message.dart";
 
@@ -19,7 +21,8 @@ class TempoMessageWidget extends ConsumerWidget {
         ),
         onPressed: () async{
           // await GadgetBridgeService.sendTempoMesssage(message);
-          await ref.read(dioProvider).post("/notify", data: {"message": message.message});
+          final formData = FormData.fromMap({"message": message.message, "sender_id": await AuthService.getDeviceID(), "color": "blue"});
+          await ref.read(dioProvider).post("/notify", data: formData);
         },
         child: Text(message.message, style: const TextStyle(color: Colors.white, fontSize: 20)),
       ),

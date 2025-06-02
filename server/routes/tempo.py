@@ -13,7 +13,7 @@ except ImportError:
     from utils.mongo_db import client
     from utils.messaging_service import MessagingService
 
-router = APIRouter(prefix="/ws")
+router = APIRouter()
 
 class TempoMessage(BaseModel):
     sender_id: str
@@ -47,6 +47,8 @@ async def notify(data: Annotated[TempoMessage, Form()]):
         "message": data.message,
         "color": data.color or "default",
     })
-
+    
+    print(f"sender: {sender}, companion: {companion}")
+    
     return JSONResponse(content={"message": "Notification sent."}, status_code=200)
 
