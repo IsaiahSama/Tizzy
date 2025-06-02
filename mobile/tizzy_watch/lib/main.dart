@@ -16,24 +16,19 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  final notificationSettings = await FirebaseMessaging.instance.requestPermission(provisional: true);
-  final fcmToken = await FirebaseMessaging.instance.getToken();
+  bool isGooglePlayServicesAvailable = await FirebaseMessaging.instance
+      .setAutoInitEnabled(true)
+      .then((_) => true)
+      .catchError((_) => false);
 
-  print('FCM Token: $fcmToken');
-
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-
+  if (!isGooglePlayServicesAvailable) {
+    print("Google Play Services is not available. Please install or update it.");
+  } else {
+    print("Google Play Services is available.");
+  }
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   runApp(ProviderScope(child: MainApp()));

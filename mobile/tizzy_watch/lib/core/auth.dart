@@ -1,0 +1,48 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tizzy_watch/core/constants.dart';
+import 'package:uuid/uuid.dart';
+
+class AuthService {
+  static Future<bool> userRegistered() async {
+    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+    final String? deviceID = await asyncPrefs.getString(deviceIDKey);
+    final String? fcmToken = await asyncPrefs.getString(fcmTokenKey);
+    return deviceID != null && fcmToken != null;
+  }
+
+  static Future<void> registerUser() async {
+    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+    final deviceID = Uuid().v1();
+
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings _ = await messaging.requestPermission(provisional: true);
+
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+
+    if (fcmToken == null) {
+      throw Exception("FCM token not available. Try registering user again.");
+    }
+
+    await asyncPrefs.setString(deviceIDKey, deviceID);
+    await asyncPrefs.setString(fcmTokenKey, fcmToken);
+  }
+
+  static Future<String?> getDeviceID() async {
+    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+    final String? deviceID = await asyncPrefs.getString(deviceIDKey);
+    return deviceID;
+  }
+
+  static Future<String?> getFCMToken() async {
+    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+    final String? fcmToken = await asyncPrefs.getString(fcmTokenKey);
+    return fcmToken;
+  }
+
+  static Future<void> clearUser() async {
+    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+    await asyncPrefs.remove(deviceIDKey);
+    await asyncPrefs.remove(fcmTokenKey);
+  }
+}
