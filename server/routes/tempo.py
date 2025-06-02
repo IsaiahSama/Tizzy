@@ -13,7 +13,7 @@ except ImportError:
     from utils.mongo_db import client
     from utils.messaging_service import MessagingService
 
-router = APIRouter()
+router = APIRouter(prefix="/tempo", tags=["Tempo"])
 
 class TempoMessage(BaseModel):
     sender_id: str

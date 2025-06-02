@@ -36,6 +36,21 @@ class AuthService {
     await Dio().post("$serverURL/register", data: formData);
   }
 
+  static Future<void> setCompanion(String companionID) async {
+
+    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+    final String? deviceID = await asyncPrefs.getString(deviceIDKey);
+    final String? fcmToken = await asyncPrefs.getString(fcmTokenKey);
+
+    final formData = FormData.fromMap({"device_id": deviceID, "fcm_key": fcmToken, "companion_id": companionID});
+    final response = await Dio().post("$serverURL/companion", data: formData);
+    if (response.statusCode != 200) {
+      throw Exception("Failed to set companion. Status code: ${response.statusCode}");
+    }
+
+    await asyncPrefs.setString(companionIDKey, companionID);
+  }
+
   static Future<String?> getDeviceID() async {
     final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
     final String? deviceID = await asyncPrefs.getString(deviceIDKey);

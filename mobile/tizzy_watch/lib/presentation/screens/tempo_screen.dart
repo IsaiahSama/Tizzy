@@ -57,7 +57,7 @@ class TempoScreen extends ConsumerWidget {
                   TempoMessage msg = TempoMessage(message: ref.read(customTextProvider.notifier).state, color: Colors.purple);
                   // await GadgetBridgeService.sendTempoMesssage(msg);
                   final formData = FormData.fromMap({"message": msg.message, "sender_id": await AuthService.getDeviceID(), "color": "blue"});
-                  await ref.read(dioProvider).post("/notify", data: formData);
+                  await ref.read(dioProvider).post("/tempo/notify", data: formData);
 
                 },
                 child: Text('Send Message'),
