@@ -11,7 +11,7 @@ class AuthService {
     return deviceID != null && fcmToken != null;
   }
 
-  static Future<void> registerUser() async {
+  static Future<void> registerUser(String gender) async {
     final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
     final deviceID = Uuid().v1();
 
@@ -26,6 +26,7 @@ class AuthService {
 
     await asyncPrefs.setString(deviceIDKey, deviceID);
     await asyncPrefs.setString(fcmTokenKey, fcmToken);
+    await asyncPrefs.setString(genderKey, gender);
   }
 
   static Future<String?> getDeviceID() async {
@@ -40,9 +41,16 @@ class AuthService {
     return fcmToken;
   }
 
+  static Future<String?> getGender() async {
+    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+    final String? gender = await asyncPrefs.getString(genderKey);
+    return gender;
+  }
+
   static Future<void> clearUser() async {
     final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
     await asyncPrefs.remove(deviceIDKey);
     await asyncPrefs.remove(fcmTokenKey);
+    await asyncPrefs.remove(genderKey);
   }
 }

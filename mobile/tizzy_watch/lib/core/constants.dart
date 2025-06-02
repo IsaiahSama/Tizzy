@@ -2,3 +2,4 @@
 
 const String deviceIDKey = 'deviceID';
 const String fcmTokenKey = 'fcmToken';
+const String genderKey = 'gender';

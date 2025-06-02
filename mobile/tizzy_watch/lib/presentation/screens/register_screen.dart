@@ -14,26 +14,40 @@ class RegisterScreen extends StatelessWidget {
           children: [
             Text(
               'Welcome to Tizzy',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
-            Text(
-              'Register to get Tizzied',
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
+            Text('Register to get Tizzied', style: TextStyle(fontSize: 20)),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async{
-                await AuthService.registerUser();
-                if (context.mounted) {
-                  context.go('/');
-                }
-              },
-              child: Text('Register!'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await AuthService.registerUser("boy");
+                      if (context.mounted) {
+                        context.go('/');
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                    child: Text("I'm the Boy!", style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await AuthService.registerUser("girl");
+                      if (context.mounted) {
+                        context.go('/');
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.pink),
+                    child: Text("I'm the Girl!", style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
