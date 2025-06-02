@@ -13,7 +13,6 @@ class MainApp extends ConsumerStatefulWidget {
 }
 
 class _MainAppState extends ConsumerState<MainApp> {
-
   Future<void> setupInteractedMessage() async {
     // Get any messages which caused the application to open from
     // a terminated state.
@@ -27,12 +26,17 @@ class _MainAppState extends ConsumerState<MainApp> {
     // Also handle any interaction when the app is in the background via a
     // Stream listener
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+
+    // Listen to notifications while in the foreground
+
+    FirebaseMessaging.onMessage.listen(_handleMessage);
   }
 
   void _handleMessage(RemoteMessage message) {
-    print("FCM Message: ${message.data}");
     if (message.data['type'] == 'tempo') {
-      GadgetBridgeService.sendTempoMesssage(TempoMessage(message: message.data['message']));
+      GadgetBridgeService.sendTempoMesssage(
+        TempoMessage(message: message.data['message']),
+      );
     }
   }
 
