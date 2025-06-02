@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class TempoMessage{
 
-  final String content;
+  final String message;
   final Color color;
 
-  TempoMessage({required this.content, this.color = Colors.blue});
+  TempoMessage({required this.message, this.color = Colors.blue});
 }

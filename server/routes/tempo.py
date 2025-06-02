@@ -1,32 +1,52 @@
 """This file will hold the routes for the Tempo application"""
 
-from fastapi import APIRouter
-from starlette.websockets import WebSocket, WebSocketDisconnect
+from typing import Annotated
+from fastapi import APIRouter, Form
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
+
 
 try:
-    from server.utils import ConnectionManager
+    from server.utils.mongo_db import client
+    from server.utils.messaging_service import MessagingService
 except ImportError:
-    from utils import ConnectionManager
+    from utils.mongo_db import client
+    from utils.messaging_service import MessagingService
 
-manager = ConnectionManager()
+router = APIRouter(prefix="/ws")
 
-router = APIRouter(prefix="/ws/tempo")
+class TempoMessage(BaseModel):
+    sender_id: str
+    message: str
+    color: str | None
 
+@router.post("/notify")
+async def notify(data: Annotated[TempoMessage, Form()]):
+    sender = await client.users_db.find_one({"device_id": data.sender_id})
+    if sender is None:
+        return JSONResponse(content={"message": "Sender not found."}, status_code=404)
 
-@router.websocket("/ws/{client_id}")
-async def tempo_endpoint(websocket: WebSocket):
-    await manager.connect(websocket)
+    companion_entry = await client.companions_db.find_one(
+        {"$or": [{"partner_1": data.sender_id}, {"partner_2": data.sender_id}]}
+    )
+    if companion_entry is None:
+        return JSONResponse(content={"message": "No companion found."}, status_code=404)
 
-    try:
-        while len(manager.active_connections) != 2:
-            await manager.broadcast("Awaiting partner...")
+    companion_id = (
+        companion_entry["partner_1"]
+        if companion_entry["partner_2"] == data.sender_id
+        else companion_entry["partner_2"]
+    )
+    
+    companion = await client.users_db.find_one({"device_id": companion_id})
+    if companion is None:
+        return JSONResponse(content={"message": "Companion not found."}, status_code=404)
 
-        while True:
-            data = await websocket.receive_text()
-            if data.isnumeric():
-                await manager.send_tempo(data, websocket)
-            else:
-                await manager.reply("Invalid message", websocket)
-    except WebSocketDisconnect:
-        manager.disconnect(websocket)
-        await manager.broadcast("Partner Disconnected!")
+    MessagingService.notify_user(companion["fcm_key"], {
+        "type": "tempo",
+        "message": data.message,
+        "color": data.color or "default",
+    })
+
+    return JSONResponse(content={"message": "Notification sent."}, status_code=200)
+

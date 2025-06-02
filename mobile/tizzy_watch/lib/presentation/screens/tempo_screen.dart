@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tizzy_watch/application/gadget_bridge_service.dart';
+import 'package:tizzy_watch/core/client.dart';
 import 'package:tizzy_watch/presentation/widgets/app_bar.dart';
 import 'package:tizzy_watch/presentation/widgets/app_drawer.dart';
 import 'package:tizzy_watch/domain/entities/tempo_message.dart';
@@ -8,13 +8,13 @@ import 'package:tizzy_watch/presentation/widgets/tempo/tempo_message_widget.dart
 
 
 List<TempoMessage> messages = [
-  TempoMessage(content: "Tempo", color: Colors.red),
-  TempoMessage(content: "I miss you!", color: Colors.green),
-  TempoMessage(content: "Checkin in~", color: Colors.blue),
-  TempoMessage(content: "Stay Safe", color: Colors.orange),
-  TempoMessage(content: "Check Phone!", color: Colors.purple),
-  TempoMessage(content: "Call?", color: Colors.yellow),
-  TempoMessage(content: "I want you!", color: Colors.pink),
+  TempoMessage(message: "Tempo", color: Colors.red),
+  TempoMessage(message: "I miss you!", color: Colors.green),
+  TempoMessage(message: "Checkin in~", color: Colors.blue),
+  TempoMessage(message: "Stay Safe", color: Colors.orange),
+  TempoMessage(message: "Check Phone!", color: Colors.purple),
+  TempoMessage(message: "Call?", color: Colors.yellow),
+  TempoMessage(message: "I want you!", color: Colors.pink),
 ];
 
 final customTextProvider = StateProvider<String>((ref) => '');
@@ -52,8 +52,10 @@ class TempoScreen extends ConsumerWidget {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  TempoMessage msg = TempoMessage(content: ref.read(customTextProvider.notifier).state, color: Colors.purple);
-                  await GadgetBridgeService.sendTempoMesssage(msg);
+                  TempoMessage msg = TempoMessage(message: ref.read(customTextProvider.notifier).state, color: Colors.purple);
+                  // await GadgetBridgeService.sendTempoMesssage(msg);
+                  await ref.read(dioProvider).post("/notify", data: {"message": msg.message});
+
                 },
                 child: Text('Send Message'),
               ),

@@ -1,13 +1,14 @@
 import "package:flutter/material.dart";
-import "package:tizzy_watch/application/gadget_bridge_service.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:tizzy_watch/core/client.dart";
 import "package:tizzy_watch/domain/entities/tempo_message.dart";
 
-class TempoMessageWidget extends StatelessWidget {
+class TempoMessageWidget extends ConsumerWidget {
   final TempoMessage message;
   const TempoMessageWidget({super.key, required this.message});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       margin: const EdgeInsets.all(8),
       child: ElevatedButton(
@@ -17,9 +18,10 @@ class TempoMessageWidget extends StatelessWidget {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
         onPressed: () async{
-          await GadgetBridgeService.sendTempoMesssage(message);
+          // await GadgetBridgeService.sendTempoMesssage(message);
+          await ref.read(dioProvider).post("/notify", data: {"message": message.message});
         },
-        child: Text(message.content, style: const TextStyle(color: Colors.white, fontSize: 20)),
+        child: Text(message.message, style: const TextStyle(color: Colors.white, fontSize: 20)),
       ),
     );
   }

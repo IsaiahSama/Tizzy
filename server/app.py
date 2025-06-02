@@ -6,16 +6,14 @@ from pydantic import BaseModel
 
 try:
     from server.routes import tempo
-    from server.utils.mongo_db import MongoClient
+    from server.utils.mongo_db import client
     from server.utils.operation_status import OperationStatus
 except ImportError:
     from routes import tempo
-    from utils.mongo_db import MongoClient
+    from utils.mongo_db import client
     from utils.operation_status import OperationStatus
 
 app = FastAPI()
-
-client = MongoClient()
 
 app.include_router(tempo.router)
 

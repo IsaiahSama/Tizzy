@@ -19,7 +19,7 @@ class GadgetBridgeService {
   }
 
   static Future<void> sendTempoMesssage(TempoMessage msg) async {
-    Map<String, dynamic> data = {'message': msg.content};
+    Map<String, dynamic> data = {'message': msg.message};
     await sendToBangle('displayTempo', data);
   }
 }

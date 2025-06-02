@@ -69,3 +69,4 @@ class MongoClient:
         await self.users_db.delete_one({"device_id": device_id, "fcm_key": fcm_key})
         return OperationStatus(200, "Device deleted successfully.")
 
+client = MongoClient()
