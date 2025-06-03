@@ -58,7 +58,10 @@ const drawWatch = () => {
 		type: "v", c: [
 			{ type: "txt", font: "Vector:50", label: "77:77", id: "time" },
 			{ type: "txt", font: "6x8:2", label: "XXX XX XXXX", id: "date" },
-			{ type: "txt", font: "6x8:3", label: "XXXXXXXXX", id: "dow" }
+			{ type: "txt", font: "6x8:3", label: "XXXXXXXXX", id: "dow" },
+			{
+				type: "btn", font: "6x8:2", label: "Tempo", cb: () => changeState(STATES.TEMPO)
+			}
 		]
 	}, { lazy: true });
 	clockLayout.update();
@@ -132,11 +135,12 @@ const draw = () => {
 	queueDraw(drawDelay);
 };
 
-Bangle.on("drag", handleDrag);
-
-draw();
+//Bangle.on("drag", handleDrag);
 
 Bangle.setUI("clock");
 
 Bangle.loadWidgets();
+
+draw();
+
 Bangle.drawWidgets();
