@@ -12,9 +12,14 @@ class MessagingService:
             image="https://raw.githubusercontent.com/IsaiahSama/LoveWatch/refs/heads/main/assets/tizzy_logo.png?token=GHSAT0AAAAAAC5SJ6WDN6GSUMW2EFK3IHJ22B4XEYQ"
         )
         
+        android = messaging.AndroidConfig(
+            priority="high",
+        )
+        
         message = messaging.Message(
             data=payload,
             notification=notification,
+            android=android,
             token=token,
         )
 
