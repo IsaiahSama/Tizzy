@@ -43,7 +43,7 @@ class TempoScreen extends ConsumerWidget {
     return Scaffold(
       appBar: MyAppBar(title: "Tempo"),
       drawer: AppDrawer(),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
