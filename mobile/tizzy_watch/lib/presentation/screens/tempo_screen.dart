@@ -33,13 +33,20 @@ List<TempoMessage> messages = [
   ),
 ];
 
-final customTextProvider = StateProvider<String>((ref) => '');
+final textControllerProvider = Provider<TextEditingController>((ref) {
+  final controller = TextEditingController();
+  ref.onDispose(() {
+    controller.dispose();
+  });
+  return controller;
+});
 
 class TempoScreen extends ConsumerWidget {
   const TempoScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final textController = ref.watch(textControllerProvider);
     return Scaffold(
       appBar: MyAppBar(title: "Tempo"),
       drawer: AppDrawer(),
@@ -49,27 +56,28 @@ class TempoScreen extends ConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 25.0, 8.0, 8.0),
-              child: Text('Quick! Send a message!', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),),
+              child: Text(
+                'Quick! Send a message!',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+              ),
             ),
             ListView.builder(
               shrinkWrap: true,
               itemCount: messages.length,
-              itemBuilder:
-                  (context, index) =>
-                      TempoMessageWidget(message: messages[index]),
+              itemBuilder: (context, index) => TempoMessageWidget(
+                message: messages[index],
+              ),
             ),
             Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8.0, 30.0, 8.0, 15.0),
                   child: TextField(
+                    controller: textController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Enter custom message',
                     ),
-                    onChanged: (text) {
-                      ref.read(customTextProvider.notifier).state = text;
-                    },
                   ),
                 ),
                 ElevatedButton(
@@ -79,7 +87,7 @@ class TempoScreen extends ConsumerWidget {
                   ),
                   onPressed: () async {
                     TempoMessage msg = TempoMessage(
-                      message: ref.read(customTextProvider.notifier).state,
+                      message: textController.text,
                       color: Colors.purple,
                     );
                     // await GadgetBridgeService.sendTempoMesssage(msg);
@@ -91,6 +99,8 @@ class TempoScreen extends ConsumerWidget {
                     await ref
                         .read(dioProvider)
                         .post("/tempo/notify", data: formData);
+
+                    textController.clear();
                   },
                   child: Text('Send Message'),
                 ),
@@ -102,3 +112,4 @@ class TempoScreen extends ConsumerWidget {
     );
   }
 }
+
