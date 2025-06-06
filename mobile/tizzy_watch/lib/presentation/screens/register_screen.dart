@@ -35,22 +35,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      width: 350,
-                      child: Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Enter Companion ID',
+                    Expanded(
+                      child: SizedBox(
+                        width: 350,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextField(
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Enter Companion ID',
+                              ),
+                              onChanged: (text) {
+                                setState(() {
+                                  companionID = text;
+                                });
+                              },
                             ),
-                            onChanged: (text) {
-                              setState(() {
-                                companionID = text;
-                              });
-                            },
-                          ),
                         ),
                       ),
                     ),
