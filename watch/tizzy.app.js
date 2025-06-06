@@ -2,6 +2,7 @@ const Layout = require("Layout");
 let drawTimeout;
 let currentMessage;
 
+
 const STATES = {
 	WATCH: "watch",
 	TEMPO: "tempo",
@@ -19,6 +20,27 @@ const changeState = (newState) => {
 		return;
 	}
 	currentState = newState;
+
+	if (currentState == STATES.WATCH) {
+		Bangle.setUI({
+			mode: "custom",
+			clock: 1,
+			touch: function (n, e) {
+				changeState(STATES.TEMPO);
+			},
+      remove: () => {Bangle.setUI();}
+		});
+	} else if (currentState == STATES.TEMPO) {
+		Bangle.setUI({
+			mode: "custom",
+			btn: function (n, e) {
+				E.showMenu(messageMenu);
+			},
+			back: () => changeState(STATES.WATCH),
+      remove: () => {Bangle.setUI();}
+		});
+	}
+
 	drawTimeout = null;
 	draw();
 };
@@ -39,6 +61,23 @@ const sendTempoMessage = (message) => {
 	// This will either be HTTP to server directly.
 	// Or intent to Phone to send to server.
 
+};
+
+let messagesMenu = {
+	"": {
+		"title": "Tempo Menu"
+	},
+	"Tempo": () => sendTempoMessage("Tempo"),
+	"I love you!": () => sendTempoMessage("I love you!"),
+	"I miss you!": () => sendTempoMessage("I miss you!"),
+	"Checking In!": () => sendTempoMessage("Checking In!"),
+	"Stay Safe!": () => sendTempoMessage("Stay Safe!"),
+	"I'm okay!": () => sendTempoMessage("I'm okay!"),
+	"I'm sad!": () => sendTempoMessage("I'm sad!"),
+	"I'm Busy!": () => sendTempoMessage("I'm Busy!"),
+	"MWAH!": () => sendTempoMessage("MWAH!"),
+	"Hungy...": () => sendTempoMessage("Hungy..."),
+	"NOMS!": () => sendTempoMessage("NOMS!")
 };
 
 const queueDraw = (delay) => {
@@ -135,13 +174,7 @@ const draw = () => {
 //Bangle.on("drag", handleDrag);
 
 Bangle.loadWidgets();
-draw();
+changeState(STATES.WATCH);
 Bangle.drawWidgets();
 
-Bangle.setUI({
-	mode: "custom",
-	clock: 1,
-	touch: function (n, e) {
-		changeState(STATES.TEMPO);
-	}
-});
+Bangle.setUI("clock", {remove: () => {Bangle.setUI();}});
