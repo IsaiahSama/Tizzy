@@ -21,26 +21,6 @@ const changeState = (newState) => {
 	}
 	currentState = newState;
 
-	if (currentState == STATES.WATCH) {
-		Bangle.setUI({
-			mode: "custom",
-			clock: 1,
-			touch: function (n, e) {
-				changeState(STATES.TEMPO);
-			},
-      remove: () => {Bangle.setUI();}
-		});
-	} else if (currentState == STATES.TEMPO) {
-		Bangle.setUI({
-			mode: "custom",
-			btn: function (n, e) {
-				E.showMenu(messageMenu);
-			},
-			back: () => changeState(STATES.WATCH),
-      remove: () => {Bangle.setUI();}
-		});
-	}
-
 	drawTimeout = null;
 	draw();
 };
@@ -63,7 +43,7 @@ const sendTempoMessage = (message) => {
 
 };
 
-let messagesMenu = {
+let messageMenu = {
 	"": {
 		"title": "Tempo Menu"
 	},
@@ -177,4 +157,20 @@ Bangle.loadWidgets();
 changeState(STATES.WATCH);
 Bangle.drawWidgets();
 
-Bangle.setUI("clock", {remove: () => {Bangle.setUI();}});
+let isMenu = false;
+
+Bangle.setUI({
+	mode: "custom",
+	clock: 1,
+	touch: function (n, e) {
+    Bangle.on("twist", function(){
+      if (isMenu){
+        E.showMenu();
+        changeState(STATES.WATCH);
+        isMenu = false;
+      }
+    });
+    isMenu = true;
+		E.showMenu(messageMenu);
+	},
+});
