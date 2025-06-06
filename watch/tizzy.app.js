@@ -1,7 +1,7 @@
-const Layout = require("Layout");
+let Layout = require("Layout");
+
 let drawTimeout;
 let currentMessage;
-
 
 const STATES = {
 	WATCH: "watch",
@@ -13,8 +13,20 @@ let currentStateIndex = 0;
 
 let validStates = ["watch", "tempo"];
 
+function setUI() {
+	Bangle.setUI({
+		mode: "custom",
+		clock: 1,
+		touch: function (n, e) {
+			isMenu = true; // Set flag that menu is open
+			clearTimeout(drawTimeout); // Stop the clock drawing loop
+			E.showMenu(messageMenu);
+		},
+	});
+}
+
 // utils
-const changeState = (newState) => {
+function changeState(newState) {
 	if (!validStates.includes(newState)) {
 		Terminal.println("Invalid state!");
 		return;
@@ -23,9 +35,9 @@ const changeState = (newState) => {
 
 	drawTimeout = null;
 	draw();
-};
+}
 
-const handleDrag = (event) => {
+function handleDrag(event) {
 	if (event.b != 0) {
 		return;
 	}
@@ -33,19 +45,24 @@ const handleDrag = (event) => {
 	// Change to the next subsequent state
 	currentStateIndex = (currentStateIndex + 1) % validStates.length;
 	changeState(validStates[currentStateIndex]);
-};
+}
 
-const sendTempoMessage = (message) => {
+function sendTempoMessage(message) {
 
 	// perform some action to send message.
 	// This will either be HTTP to server directly.
 	// Or intent to Phone to send to server.
 
-};
+}
 
 let messageMenu = {
 	"": {
-		"title": "Tempo Menu"
+		title: "Tempo Menu",
+		back: function () {
+			isMenu = false;
+			changeState(STATES.WATCH);
+			setUI();
+		}
 	},
 	"Tempo": () => sendTempoMessage("Tempo"),
 	"I love you!": () => sendTempoMessage("I love you!"),
@@ -60,7 +77,7 @@ let messageMenu = {
 	"NOMS!": () => sendTempoMessage("NOMS!")
 };
 
-const queueDraw = (delay) => {
+function queueDraw(delay) {
 	if (drawTimeout)
 		clearTimeout(drawTimeout);
 
@@ -68,11 +85,11 @@ const queueDraw = (delay) => {
 		drawTimeout = undefined;
 		draw();
 	}, delay);
-};
+}
 
 // Watch Draw
 
-const drawWatch = () => {
+function drawWatch() {
 	let clockLayout = new Layout({
 		type: "v", c: [
 			{ type: "txt", font: "Vector:50", label: "77:77", id: "time" },
@@ -94,11 +111,11 @@ const drawWatch = () => {
 
 	// Preparing to draw
 	clockLayout.render();
-};
+}
 
 // Tempo Draw
 
-const displayTempo = (data) => { // Function called from Phone
+function displayTempo(data) { // Function called from Phone
 
 	let newMessage = data.message;
 	currentMessage = newMessage;
@@ -109,9 +126,9 @@ const displayTempo = (data) => { // Function called from Phone
 		changeState(STATES.WATCH);
 	}, 5000);
 	draw(); // Trigger draw
-};
+}
 
-const drawTempo = () => {
+function drawTempo() {
 	let message = currentMessage ?? "???";
 	const tempoLayout = new Layout(
 		{
@@ -133,12 +150,14 @@ const drawTempo = () => {
 	tempoLayout.update();
 
 	tempoLayout.render();
-};
+}
 
 // Global Draw
+let isMenu = false;
 
-const draw = () => {
+function draw() {
 	// Draw based on current state
+	if (isMenu) return;
 	let drawDelay = 1000;
 	g.clearRect(Bangle.appRect);
 	if (currentState === STATES.WATCH) {
@@ -149,7 +168,7 @@ const draw = () => {
 	}
 
 	queueDraw(drawDelay);
-};
+}
 
 //Bangle.on("drag", handleDrag);
 
@@ -157,20 +176,4 @@ Bangle.loadWidgets();
 changeState(STATES.WATCH);
 Bangle.drawWidgets();
 
-let isMenu = false;
-
-Bangle.setUI({
-	mode: "custom",
-	clock: 1,
-	touch: function (n, e) {
-    Bangle.on("twist", function(){
-      if (isMenu){
-        E.showMenu();
-        changeState(STATES.WATCH);
-        isMenu = false;
-      }
-    });
-    isMenu = true;
-		E.showMenu(messageMenu);
-	},
-});
+setUI();
