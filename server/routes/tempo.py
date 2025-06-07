@@ -52,3 +52,6 @@ async def notify(data: Annotated[TempoMessage, Form()]):
     
     return JSONResponse(content={"message": "Notification sent."}, status_code=200)
 
+@router.post("/w/notify", response_class=JSONResponse)
+async def notify_json(data: TempoMessage):
+    return await notify(data)
