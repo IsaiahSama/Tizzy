@@ -1,5 +1,5 @@
 let Layout = require("Layout");
-let userID = "someID";
+let userID = null;
 
 const STATES = {
 	WATCH: "watch",
@@ -15,7 +15,6 @@ let drawTimeout;
 let currentMessage;
 
 let currentState = STATES.WATCH;
-let currentStateIndex = 0;
 
 let validStates = ["watch", "tempo"];
 
@@ -31,16 +30,6 @@ function changeState(newState) {
 	draw();
 }
 
-function handleDrag(event) {
-	if (event.b != 0) {
-		return;
-	}
-
-	// Change to the next subsequent state
-	currentStateIndex = (currentStateIndex + 1) % validStates.length;
-	changeState(validStates[currentStateIndex]);
-}
-
 function trigger() {
 	Bangle.http(PATHS.BASE);
 }
@@ -49,7 +38,9 @@ function sendTempoMessage(message) {
 	// perform some action to send message.
 	// This will either be HTTP to server directly.
 	// Or intent to Phone to send to server.
-
+	if (!userID) {
+		return;
+	}
 	let payload = {
 		message,
 		"sender_id": userID,
@@ -110,6 +101,7 @@ function drawWatch() {
 			{ type: "txt", font: "Vector:50", label: "77:77", id: "time" },
 			{ type: "txt", font: "6x8:2", label: "XXX XX XXXX", id: "date" },
 			{ type: "txt", font: "6x8:3", label: "XXXXXXXXX", id: "dow" },
+			{type: "txt", font: "6x8", label: userID == null ? "Not synced with Phone" : "Synced with Phone", id: "userID"}
 		]
 	}, { lazy: true });
 	clockLayout.update();
@@ -128,7 +120,7 @@ function drawWatch() {
 	clockLayout.render();
 }
 
-// Tempo Draw
+// Android -> Bangle JS
 
 function displayTempo(data) { // Function called from Phone
 
@@ -142,6 +134,13 @@ function displayTempo(data) { // Function called from Phone
 	}, 5000);
 	draw(); // Trigger draw
 }
+
+function setUserID(data) {
+	userID = data.userID;
+	draw();
+}
+
+// Tempo Draw
 
 function drawTempo() {
 	let message = currentMessage ?? "???";

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tizzy_watch/application/gadget_bridge_service.dart';
 import 'package:tizzy_watch/core/auth.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -8,7 +9,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
   const MyAppBar({super.key, required this.title})
-      : preferredSize = const Size.fromHeight(56.0);
+    : preferredSize = const Size.fromHeight(56.0);
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +18,21 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       backgroundColor: Colors.deepPurple,
       foregroundColor: Colors.white,
-      actions: [IconButton(onPressed: () async{
-        await AuthService.clearUser();
-        if(context.mounted) context.go('/register');
-      }, icon: const Icon(Icons.delete))],
+      actions: [
+        IconButton(
+          onPressed: () async {
+            await AuthService.clearUser();
+            if (context.mounted) context.go('/register');
+          },
+          icon: const Icon(Icons.delete),
+        ),
+        IconButton(
+          onPressed: () async {
+            await GadgetBridgeService.sendUserID(null);
+          },
+          icon: const Icon(Icons.sync),
+        ),
+      ],
     );
   }
 }
