@@ -2,7 +2,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizzy_watch/core/constants.dart';
-import 'package:tizzy_watch/core/toaster.dart';
 import 'package:uuid/uuid.dart';
 import 'package:dio/dio.dart';
 
@@ -44,12 +43,10 @@ class AuthService {
     final String? fcmToken = await asyncPrefs.getString(fcmTokenKey);
 
     final formData = FormData.fromMap({"device_id": deviceID, "fcm_key": fcmToken, "companion_id": companionID});
-    Toaster.showToast("Setting companion...");
     final response = await Dio().post("$serverURL/companion", data: formData);
     if (response.statusCode != 200) {
       throw Exception("Failed to set companion. Status code: ${response.statusCode}");
     }
-    Toaster.showToast("Companion set successfully.");
     await asyncPrefs.setString(companionIDKey, companionID);
   }
 

@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tizzy_watch/core/constants.dart';
-import 'package:tizzy_watch/core/toaster.dart';
 
 final dioProvider = Provider<Dio>((ref) => Dio(
   BaseOptions(
