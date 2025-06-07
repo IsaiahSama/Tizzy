@@ -1,12 +1,17 @@
 let Layout = require("Layout");
 
-let drawTimeout;
-let currentMessage;
-
 const STATES = {
 	WATCH: "watch",
 	TEMPO: "tempo",
 };
+
+const PATHS = {
+	BASE: "https://tizzy.onrender.com",
+	TEMPO: "/tempo/notify",
+};
+
+let drawTimeout;
+let currentMessage;
 
 let currentState = STATES.WATCH;
 let currentStateIndex = 0;
@@ -35,11 +40,27 @@ function handleDrag(event) {
 	changeState(validStates[currentStateIndex]);
 }
 
-function sendTempoMessage(message) {
+function trigger() {
+	Bangle.http(PATHS.BASE);
+}
 
+function sendTempoMessage(message) {
 	// perform some action to send message.
 	// This will either be HTTP to server directly.
 	// Or intent to Phone to send to server.
+
+	let payload = {
+		message,
+		"sender_id": user_id,
+	};
+
+	options = baseOptions;
+	options.method = "POST";
+	options.body = payload;
+
+	Bangle.http(PATHS.BASE + PATHS.TEMPO, options).then(data => {
+		Terminal.println("Success");
+	});
 
 }
 
@@ -161,7 +182,9 @@ function draw() {
 //Bangle.on("drag", handleDrag);
 
 Bangle.on('touch', function (b, xy) {
+
 	if (currentState == STATES.WATCH && !isMenu) {
+		trigger();
 		isMenu = true; // Set flag that menu is open
 		clearTimeout(drawTimeout); // Stop the clock drawing loop
 		E.showMenu(messageMenu);
