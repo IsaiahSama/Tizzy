@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tizzy_watch/application/gadget_bridge_service.dart';
 import "package:tizzy_watch/core/router.dart";
 import 'package:tizzy_watch/domain/entities/tempo_message.dart';
@@ -44,7 +45,8 @@ class _MainAppState extends ConsumerState<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(routerConfig: router);
+    return MaterialApp.router(routerConfig: router,
+    builder: FToastBuilder());
   }
 }
 

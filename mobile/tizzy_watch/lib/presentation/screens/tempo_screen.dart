@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tizzy_watch/core/client.dart';
+import 'package:tizzy_watch/core/constants.dart';
 import 'package:tizzy_watch/presentation/widgets/app_bar.dart';
 import 'package:tizzy_watch/presentation/widgets/app_drawer.dart';
 import 'package:tizzy_watch/domain/entities/tempo_message.dart';
@@ -98,7 +99,7 @@ class TempoScreen extends ConsumerWidget {
                     });
                     await ref
                         .read(dioProvider)
-                        .post("/tempo/notify", data: formData);
+                        .post(notifyURL, data: formData);
 
                     textController.clear();
                   },
