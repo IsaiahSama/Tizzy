@@ -1,7 +1,7 @@
 """This file will hold the routes for the Tempo application"""
 
 from typing import Annotated
-from fastapi import APIRouter, Form
+from fastapi import APIRouter, Body, Form
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
@@ -53,5 +53,17 @@ async def notify(data: Annotated[TempoMessage, Form()]):
     return JSONResponse(content={"message": "Notification sent."}, status_code=200)
 
 @router.post("/w/notify", response_class=JSONResponse)
-async def notify_json(data: TempoMessage):
-    return await notify(data)
+async def notify_json(body = Body(None)):
+    message: str = body.get("message") or ""
+    sender_id: str = body.get("sender_id") or ""
+    color: str = body.get("color") or ""
+    
+    if message == "" or sender_id == "":
+        return JSONResponse(content={"message": "No message provided."}, status_code=400)
+    
+    tmsg: TempoMessage = TempoMessage(
+        sender_id=sender_id,
+        message=message,
+        color=color,
+    )
+    return await notify(tmsg)
