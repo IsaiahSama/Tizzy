@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tizzy_watch/core/client.dart';
@@ -65,9 +64,9 @@ class TempoScreen extends ConsumerWidget {
             ListView.builder(
               shrinkWrap: true,
               itemCount: messages.length,
-              itemBuilder: (context, index) => TempoMessageWidget(
-                message: messages[index],
-              ),
+              itemBuilder:
+                  (context, index) =>
+                      TempoMessageWidget(message: messages[index]),
             ),
             Column(
               children: [
@@ -83,24 +82,24 @@ class TempoScreen extends ConsumerWidget {
                 ),
                 ElevatedButton(
                   style: ButtonStyle(
-                    foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
-                    backgroundColor: WidgetStateProperty.all<Color>(Colors.deepPurple),
+                    foregroundColor: WidgetStateProperty.all<Color>(
+                      Colors.white,
+                    ),
+                    backgroundColor: WidgetStateProperty.all<Color>(
+                      Colors.deepPurple,
+                    ),
                   ),
                   onPressed: () async {
                     TempoMessage msg = TempoMessage(
                       message: textController.text,
                       color: Colors.purple,
                     );
-                    // await GadgetBridgeService.sendTempoMesssage(msg);
-                    final formData = FormData.fromMap({
+                    final formData = {
                       "message": msg.message,
                       "sender_id": await AuthService.getDeviceID(),
                       "color": "blue",
-                    });
-                    await ref
-                        .read(dioProvider)
-                        .post(notifyURL, data: formData);
-
+                    };
+                    await Client.makePostRequest(notifyURL, formData, context);
                     textController.clear();
                   },
                   child: Text('Send Message'),
@@ -113,4 +112,3 @@ class TempoScreen extends ConsumerWidget {
     );
   }
 }
-
