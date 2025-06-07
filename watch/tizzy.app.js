@@ -1,4 +1,5 @@
 let Layout = require("Layout");
+let userID = "someID";
 
 const STATES = {
 	WATCH: "watch",
@@ -7,7 +8,7 @@ const STATES = {
 
 const PATHS = {
 	BASE: "https://tizzy.onrender.com",
-	TEMPO: "/tempo/notify",
+	TEMPO: "/tempo/w/notify",
 };
 
 let drawTimeout;
@@ -51,12 +52,17 @@ function sendTempoMessage(message) {
 
 	let payload = {
 		message,
-		"sender_id": user_id,
+		"sender_id": userID,
 	};
 
-	options = baseOptions;
-	options.method = "POST";
-	options.body = payload;
+	options = {
+		method: "post",
+		body: payload,
+		timeout: 52 * 1000, // 52 seconds
+		headers: {
+			"Content-Type": "application/json"
+		}
+	};
 
 	Bangle.http(PATHS.BASE + PATHS.TEMPO, options).then(data => {
 		Terminal.println("Success");
