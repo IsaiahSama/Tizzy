@@ -1,9 +1,10 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tizzy_watch/core/client.dart';
 import 'package:tizzy_watch/core/constants.dart';
 import 'package:uuid/uuid.dart';
 import 'package:dio/dio.dart';
-import "package:tizzy_watch/core/client.dart";
 
 
 class AuthService {
@@ -14,7 +15,7 @@ class AuthService {
     return deviceID != null && fcmToken != null;
   }
 
-  static Future<void> registerUser(String gender) async {
+  static Future<void> registerUser(String gender, BuildContext? context) async {
     final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
     final deviceID = Uuid().v1();
 
@@ -27,27 +28,28 @@ class AuthService {
       throw Exception("FCM token not available. Try registering user again.");
     }
 
+    final response = await Client.makePostRequest(registerURL, {"device_id": deviceID, "fcm_key": fcmToken}, context);
+
+    if (response != null && response.statusCode == 200) {
+      throw Exception("Failed to register user. Status code: ${response.statusCode}");
+    }
     await asyncPrefs.setString(deviceIDKey, deviceID);
     await asyncPrefs.setString(fcmTokenKey, fcmToken);
     await asyncPrefs.setString(genderKey, gender);
 
-    final formData = FormData.fromMap({"device_id": deviceID, "fcm_key": fcmToken});
-
-    await Dio().post("$serverURL/register", data: formData);
   }
 
-  static Future<void> setCompanion(String companionID) async {
+  static Future<void> setCompanion(String companionID, BuildContext? context) async {
 
     final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
     final String? deviceID = await asyncPrefs.getString(deviceIDKey);
     final String? fcmToken = await asyncPrefs.getString(fcmTokenKey);
 
-    final formData = FormData.fromMap({"device_id": deviceID, "fcm_key": fcmToken, "companion_id": companionID});
-    final response = await Dio().post("$serverURL/companion", data: formData);
-    if (response.statusCode != 200) {
+    final response = await Client.makePostRequest(companionURL,{"device_id": deviceID, "fcm_key": fcmToken, "companion_id": companionID}, context);
+
+    if (response != null && response.statusCode != 200) {
       throw Exception("Failed to set companion. Status code: ${response.statusCode}");
     }
-
     await asyncPrefs.setString(companionIDKey, companionID);
   }
 
@@ -73,7 +75,13 @@ class AuthService {
     final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
 
     final formData = FormData.fromMap({"device_id": await asyncPrefs.getString(deviceIDKey), "fcm_key": await asyncPrefs.getString(fcmTokenKey)});
-    await Dio().post("$serverURL/delete", data: formData);
+
+    try{
+      await Dio().post(deleteURL, data: formData);
+    }
+    catch(e){
+      print("Error deleting user: $e");
+    }
 
     await asyncPrefs.clear();
   }

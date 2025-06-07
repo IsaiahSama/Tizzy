@@ -35,22 +35,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      width: 350,
-                      child: Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Enter Companion ID',
+                    Expanded(
+                      child: SizedBox(
+                        width: 350,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextField(
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Enter Companion ID',
+                              ),
+                              onChanged: (text) {
+                                setState(() {
+                                  companionID = text;
+                                });
+                              },
                             ),
-                            onChanged: (text) {
-                              setState(() {
-                                companionID = text;
-                              });
-                            },
-                          ),
                         ),
                       ),
                     ),
@@ -67,7 +67,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () async {
-                        await _registerUser("boy");
+                        await _registerUser("boy", context);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
@@ -82,7 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       onPressed: () async {
-                        await _registerUser("girl");
+                        await _registerUser("girl", context);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.pink,
@@ -102,10 +102,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Future<void> _registerUser(String gender) async {
-    await AuthService.registerUser(gender);
+  Future<void> _registerUser(String gender, BuildContext context) async {
+    await AuthService.registerUser(gender, context);
     if (companionID.isNotEmpty) {
-      await AuthService.setCompanion(companionID);
+      await AuthService.setCompanion(companionID, context);
     }
     if (mounted) {
       context.go('/');
