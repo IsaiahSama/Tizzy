@@ -20,6 +20,10 @@ class Client{
     return ref.watch(dioProvider);
   }
 
+  static Future<void> promptServer() async {
+    await dio.get('/');
+  }
+
   static Future<Response?> makePostRequest(String url, Map<String, dynamic> data, BuildContext? context) async {
     FormData body = FormData.fromMap(data);
     Response<dynamic>? response;
