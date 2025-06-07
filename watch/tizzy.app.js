@@ -13,18 +13,6 @@ let currentStateIndex = 0;
 
 let validStates = ["watch", "tempo"];
 
-function setUI() {
-	Bangle.setUI({
-		mode: "custom",
-		clock: 1,
-		touch: function (n, e) {
-			isMenu = true; // Set flag that menu is open
-			clearTimeout(drawTimeout); // Stop the clock drawing loop
-			E.showMenu(messageMenu);
-		},
-	});
-}
-
 // utils
 function changeState(newState) {
 	if (!validStates.includes(newState)) {
@@ -61,7 +49,7 @@ let messageMenu = {
 		back: function () {
 			isMenu = false;
 			changeState(STATES.WATCH);
-			setUI();
+			Bangle.setUI("clock");
 		}
 	},
 	"Tempo": () => sendTempoMessage("Tempo"),
@@ -172,8 +160,16 @@ function draw() {
 
 //Bangle.on("drag", handleDrag);
 
+Bangle.on('touch', function (b, xy) {
+	if (currentState == STATES.WATCH && !isMenu) {
+		isMenu = true; // Set flag that menu is open
+		clearTimeout(drawTimeout); // Stop the clock drawing loop
+		E.showMenu(messageMenu);
+	}
+});
+
 Bangle.loadWidgets();
 changeState(STATES.WATCH);
 Bangle.drawWidgets();
 
-setUI();
+Bangle.setUI("clock");
