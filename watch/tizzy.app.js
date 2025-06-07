@@ -39,6 +39,7 @@ function sendTempoMessage(message) {
 	// This will either be HTTP to server directly.
 	// Or intent to Phone to send to server.
 	if (!userID) {
+		Bangle.buzz(100).then(() => setTimeout(() => Bangle.buzz(100), 100));
 		return;
 	}
 	let payload = {
@@ -56,7 +57,7 @@ function sendTempoMessage(message) {
 	};
 
 	Bangle.http(PATHS.BASE + PATHS.TEMPO, options).then(data => {
-		Terminal.println("Success");
+		Bangle.buzz(500);
 	});
 
 }
@@ -101,7 +102,7 @@ function drawWatch() {
 			{ type: "txt", font: "Vector:50", label: "77:77", id: "time" },
 			{ type: "txt", font: "6x8:2", label: "XXX XX XXXX", id: "date" },
 			{ type: "txt", font: "6x8:3", label: "XXXXXXXXX", id: "dow" },
-			{type: "txt", font: "6x8", label: userID == null ? "Not synced with Phone" : "Synced with Phone", id: "userID"}
+			{ type: "txt", font: "6x8", label: userID == null ? "Not synced with Phone" : "Synced with Phone", id: "userID" }
 		]
 	}, { lazy: true });
 	clockLayout.update();
