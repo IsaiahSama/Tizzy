@@ -134,6 +134,7 @@ function displayTempo(data) { // Function called from Phone
 
 	Bangle.buzz(1000);
 	changeState(STATES.TEMPO);
+	Bangle.setBacklight(1);
 	setTimeout(() => {
 		changeState(STATES.WATCH);
 	}, 5000);
