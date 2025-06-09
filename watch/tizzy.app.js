@@ -62,14 +62,17 @@ function sendTempoMessage(message) {
 
 }
 
+function closeMenu () {
+	if (isMenu == false) return;
+	isMenu = false;
+	changeState(STATES.WATCH);
+	Bangle.setUI("clock");
+}
+
 let messageMenu = {
 	"": {
 		title: "Tempo Menu",
-		back: function () {
-			isMenu = false;
-			changeState(STATES.WATCH);
-			Bangle.setUI("clock");
-		}
+		back: closeMenu
 	},
 	"Tempo": () => sendTempoMessage("Tempo"),
 	"I love you!": () => sendTempoMessage("I love you!"),
@@ -127,8 +130,9 @@ function displayTempo(data) { // Function called from Phone
 
 	let newMessage = data.message;
 	currentMessage = newMessage;
-	Bangle.buzz(1000);
+	closeMenu();
 
+	Bangle.buzz(1000);
 	changeState(STATES.TEMPO);
 	setTimeout(() => {
 		changeState(STATES.WATCH);
