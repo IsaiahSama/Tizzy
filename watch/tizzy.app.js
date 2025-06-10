@@ -82,7 +82,8 @@ let messageMenu = {
 	"You too!": () => sendTempoMessage("You too!"),
 	"Checking In!": () => sendTempoMessage("Checking In!"),
 	"Stay Safe!": () => sendTempoMessage("Stay Safe!"),
-	"Thank you!": () => sendTempoMessage("Thank you!"),
+	"Thankie": () => sendTempoMessage("Thankie"),
+	"Yw": () => sendTempoMessage("Yw"),
 	"I'm okay!": () => sendTempoMessage("I'm okay!"),
 	"I'm sad!": () => sendTempoMessage("I'm sad!"),
 	"I'm here!": () => sendTempoMessage("I'm here!"),
@@ -135,20 +136,39 @@ function drawWatch() {
 }
 
 // Android -> Bangle JS
-
+let tempoTimeout = null;
+let countTimeout = null;
+let counter = 0;
 function displayTempo(data) { // Function called from Phone
 
 	let newMessage = data.message;
-	currentMessage = newMessage;
 	closeMenu();
 
-	Bangle.buzz(1000);
-	changeState(STATES.TEMPO);
-	Bangle.setBacklight(1);
-	setTimeout(() => {
-		changeState(STATES.WATCH);
-	}, 5000);
-	draw(); // Trigger draw
+	function doTempo(message) {
+		currentMessage = message;
+		Bangle.buzz(counter < 2 ? 1000 : 200);
+		Bangle.setBacklight(1);
+		changeState(STATES.TEMPO);
+
+		tempoTimeout = setTimeout(() => {
+			changeState(STATES.WATCH);
+		}, 5000);
+	}
+
+	counter += 1;
+
+	if (tempoTimeout) {
+		clearTimeout(tempoTimeout);
+		setTimeout(() => doTempo(newMessage), 1200 * counter);
+	}
+	else {
+		doTempo(newMessage);
+	}
+	if (countTimeout) {
+		clearInterval(countTimeout);
+	}
+
+	countTimeout = setTimeout(() => counter = 0, 5000);
 }
 
 function setUserID(data) {
