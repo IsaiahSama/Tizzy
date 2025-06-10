@@ -76,15 +76,25 @@ let messageMenu = {
 	},
 	"Tempo": () => sendTempoMessage("Tempo"),
 	"I love you!": () => sendTempoMessage("I love you!"),
+	"I love you too!": () => sendTempoMessage("I love you too!"),
 	"I miss you!": () => sendTempoMessage("I miss you!"),
+	"Me too!": () => sendTempoMessage("Me too!"),
+	"You too!": () => sendTempoMessage("You too!"),
 	"Checking In!": () => sendTempoMessage("Checking In!"),
 	"Stay Safe!": () => sendTempoMessage("Stay Safe!"),
+	"Thank you!": () => sendTempoMessage("Thank you!"),
 	"I'm okay!": () => sendTempoMessage("I'm okay!"),
 	"I'm sad!": () => sendTempoMessage("I'm sad!"),
+	"I'm here!": () => sendTempoMessage("I'm here!"),
 	"I'm Busy!": () => sendTempoMessage("I'm Busy!"),
 	"MWAH!": () => sendTempoMessage("MWAH!"),
+	"Yes!": () => sendTempoMessage("Yes!"),
+	"No!": () => sendTempoMessage("No!"),
+	"No you!": () => sendTempoMessage("No you!"),
 	"Hungy...": () => sendTempoMessage("Hungy..."),
-	"NOMS!": () => sendTempoMessage("NOMS!")
+	"NOMS!": () => sendTempoMessage("NOMS!"),
+	"Call me": () => sendTempoMessage("Call me"),
+	"Buzz buzz": () => sendTempoMessage("Buzz buzz"),
 };
 
 function queueDraw(delay) {
