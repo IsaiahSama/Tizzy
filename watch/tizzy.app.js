@@ -62,7 +62,7 @@ function sendTempoMessage(message) {
 
 }
 
-function closeMenu () {
+function closeMenu() {
 	if (isMenu == false) return;
 	isMenu = false;
 	changeState(STATES.WATCH);
@@ -162,18 +162,7 @@ function drawTempo() {
 	let message = currentMessage ?? "???";
 	const tempoLayout = new Layout(
 		{
-			type: "v", c: [
-				{
-					type: "txt", font: "Vector:24", label: message, id: "tempo"
-				},
-				{
-					type: "v", c: [
-						{ type: "btn", font: "6x8", label: "OK", cb: () => sendTempoMessage("I'm okay!"), fillx: 1, pad: 3 },
-						{ type: "btn", font: "6x8", label: "BBILY", cb: () => sendTempoMessage("Busy, but I love you!"), fillx: 1, pad: 2 },
-						{ type: "btn", font: "6x8", label: "Mwah", cb: () => sendTempoMessage("MWAH!"), fillx: 1, pad: 3 },
-					]
-				}
-			]
+			type: "txt", font: "Vector:22", label: message, id: "tempo"
 		}
 	);
 
