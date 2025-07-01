@@ -26,18 +26,12 @@ class Client {
     FormData body = FormData.fromMap(data);
     Response<dynamic>? response;
     try {
-      if (context != null && context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Making Request...')));
-      }
       response = await dio.post(url, data: body);
     } catch (e) {
-      // do something
       if (context != null && context.mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('Failed!')));
+        ).showSnackBar(const SnackBar(content: Text('Failed to make request!')));
       }
     }
 
