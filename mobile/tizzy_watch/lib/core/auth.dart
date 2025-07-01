@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tizzy_watch/core/client.dart';
 import 'package:tizzy_watch/core/constants.dart';
 import 'package:uuid/uuid.dart';
-import 'package:dio/dio.dart';
 
 
 class AuthService {
@@ -71,13 +70,11 @@ class AuthService {
     return gender;
   }
 
-  static Future<void> clearUser() async {
+  static Future<void> clearUser(BuildContext? context) async {
     final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
 
-    final formData = FormData.fromMap({"device_id": await asyncPrefs.getString(deviceIDKey), "fcm_key": await asyncPrefs.getString(fcmTokenKey)});
-
     try{
-      await Dio().post(deleteURL, data: formData);
+      await Client.makePostRequest(deleteURL, {"device_id": await asyncPrefs.getString(deviceIDKey), "fcm_key": await asyncPrefs.getString(fcmTokenKey)}, context);
     }
     catch(e){
       print("Error deleting user: $e");
