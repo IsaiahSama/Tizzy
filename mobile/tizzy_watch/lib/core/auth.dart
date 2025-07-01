@@ -30,7 +30,7 @@ class AuthService {
 
     final response = await Client.makePostRequest(registerURL, {"device_id": deviceID, "fcm_key": fcmToken}, context);
 
-    if (response != null && response.statusCode == 200) {
+    if (response != null && response.statusCode != 200) {
       throw Exception("Failed to register user. Status code: ${response.statusCode}");
     }
     await asyncPrefs.setString(deviceIDKey, deviceID);
