@@ -22,7 +22,7 @@ class TempoMessageWidget extends ConsumerWidget {
         ),
         onPressed: () async{
           // await GadgetBridgeService.sendTempoMesssage(message);
-          // await Client.makePostRequest(notifyURL, {"message": message.message, "sender_id": await AuthService.getDeviceID(), "color": "blue"}, context);
+          await Client.makePostRequest(notifyURL, {"message": message.message, "sender_id": await AuthService.getDeviceID(), "color": "blue"}, context);
           ref.read(messagesProvider.notifier).addMessage(message);
         },
         child: Text(message.message, style: const TextStyle(color: Colors.white, fontSize: 20)),
