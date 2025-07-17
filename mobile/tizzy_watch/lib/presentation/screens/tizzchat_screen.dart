@@ -16,6 +16,7 @@ class TizzChatScreen extends ConsumerWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ChatBox(),
             Row(children: [

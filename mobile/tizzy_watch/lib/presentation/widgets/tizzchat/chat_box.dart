@@ -1,21 +1,33 @@
 import "package:flutter/material.dart";
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tizzy_watch/core/providers/messages_provider.dart';
+import 'package:tizzy_watch/domain/entities/tempo_message.dart';
 
-List<String> messages = List<String>.generate(20, (index) => "Message $index");
+class ChatBox extends ConsumerStatefulWidget {
+  const ChatBox({super.key});
 
-class ChatBox extends StatelessWidget {
-  ChatBox({super.key});
+  @override
+  ConsumerState<ChatBox> createState() => _ChatBoxState();
+}
 
+class _ChatBoxState extends ConsumerState<ChatBox> {
   final ScrollController _controller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     scrollToBottom();
+    
+    List<TempoMessage> messages = ref.watch(messagesProvider);
+
+    if (messages.isEmpty) {
+      return Center(child: Text("No messages yet"));
+    }
     return Expanded(
       child: ListView.builder(
         controller: _controller,
         itemCount: messages.length,
-        prototypeItem: ListTile(title: Text(messages.first)),
-        itemBuilder: (context, idx) => ListTile(title: Text(messages[idx])),
+        prototypeItem: ListTile(title: Text(messages.first.message), tileColor: messages.first.color),
+        itemBuilder: (context, idx) => ListTile(title: Text(messages[idx].message), tileColor: messages[idx].color),
       ),
     );
   }
