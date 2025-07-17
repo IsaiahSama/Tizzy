@@ -227,6 +227,12 @@ Bangle.on('touch', function (b, xy) {
 	}
 });
 
+Bangle.on("backlight", function (on) {
+	if (on == false && isMenu) {
+		closeMenu();
+	}
+});
+
 Bangle.loadWidgets();
 changeState(STATES.WATCH);
 Bangle.drawWidgets();
