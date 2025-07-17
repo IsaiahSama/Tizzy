@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tizzy_watch/application/gadget_bridge_service.dart';
+import 'package:tizzy_watch/core/providers/messages_provider.dart';
 import "package:tizzy_watch/core/router.dart";
 import 'package:tizzy_watch/domain/entities/tempo_message.dart';
 
@@ -21,16 +22,16 @@ class _MainAppState extends ConsumerState<MainApp> {
         await FirebaseMessaging.instance.getInitialMessage();
 
     if (initialMessage != null) {
-      _handleMessage(initialMessage);
+      _handleMessage(initialMessage, ref);
     }
 
     // Also handle any interaction when the app is in the background via a
     // Stream listener
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+    FirebaseMessaging.onMessageOpenedApp.listen((message) => _handleMessage(message, ref));
 
     // Listen to notifications while in the foreground
 
-    FirebaseMessaging.onMessage.listen(_handleMessage);
+    FirebaseMessaging.onMessage.listen((message) => _handleMessage(message, ref));
 
     // Listen to messages from the background
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -51,13 +52,16 @@ class _MainAppState extends ConsumerState<MainApp> {
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  _handleMessage(message);
+  _handleMessage(message, null);
 
 }
 
-void _handleMessage(RemoteMessage message) {
+void _handleMessage(RemoteMessage message, WidgetRef? ref) {
   if (message.data['type'] == 'tempo') {
     GadgetBridgeService.sendTempoMesssage(
+      TempoMessage(message: message.data['message']),
+    );
+    ref?.read(messagesProvider.notifier).addMessage(
       TempoMessage(message: message.data['message']),
     );
   }
