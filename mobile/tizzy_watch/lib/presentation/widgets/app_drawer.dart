@@ -27,6 +27,12 @@ class AppDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            title: Text('TizzChat'),
+            onTap: () {
+              context.goNamed('TizzChat');
+            },
+          ),
+          ListTile(
             title: Text('Stats'),
             onTap: () {
               context.goNamed('Stats');
@@ -36,12 +42,6 @@ class AppDrawer extends StatelessWidget {
             title: Text('ISeeYou'),
             onTap: () {
               context.goNamed('ISeeYou');
-            },
-          ),
-          ListTile(
-            title: Text('TizzChat'),
-            onTap: () {
-              context.goNamed('TizzChat');
             },
           ),
         ],

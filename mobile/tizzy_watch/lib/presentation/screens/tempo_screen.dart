@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tizzy_watch/core/client.dart';
 import 'package:tizzy_watch/core/constants.dart';
 import 'package:tizzy_watch/presentation/widgets/app_bar.dart';
@@ -48,7 +49,14 @@ class TempoScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textController = ref.watch(textControllerProvider);
     return Scaffold(
-      appBar: MyAppBar(title: "Tempo"),
+      appBar: MyAppBar(title: "Tempo", actions: [
+        IconButton(
+          icon: Icon(Icons.chat),
+          onPressed: () {
+            context.goNamed('TizzChat');
+          },
+        ),
+      ]),
       drawer: AppDrawer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),

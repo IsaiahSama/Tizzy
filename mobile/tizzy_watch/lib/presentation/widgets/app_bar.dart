@@ -5,8 +5,9 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize;
   final String title;
+  final List<Widget>? actions;
 
-  const MyAppBar({super.key, required this.title})
+  const MyAppBar({super.key, required this.title, this.actions})
     : preferredSize = const Size.fromHeight(56.0);
 
   @override
@@ -23,6 +24,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           },
           icon: const Icon(Icons.sync),
         ),
+        ...actions ?? [],
       ],
     );
   }
