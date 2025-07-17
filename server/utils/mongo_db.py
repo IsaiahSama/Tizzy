@@ -24,10 +24,12 @@ class MongoClient:
     db_name: str = "TizzyDB"
     users_table: str = "users"
     companions_table: str = "companions"
+    hrm_table: str = "hrm"
 
     db: AsyncIOMotorDatabase[Any]
     users_db: AsyncIOMotorCollection[dict[str, str]]
     companions_db: AsyncIOMotorCollection[dict[str, str]]
+    hrm_db: AsyncIOMotorCollection[dict[str, str | int]]
 
     def __init__(self):
         self.connect()
@@ -39,7 +41,8 @@ class MongoClient:
 
         self.users_db = self.db.get_collection(self.users_table)
         self.companions_db = self.db.get_collection(self.companions_table)
-        
+        self.hrm_db = self.db.get_collection(self.hrm_table)
+
     async def register_device(self, device_id: str, fcm_key: str) -> OperationStatus:
         if await self.users_db.find_one({"device_id": device_id}) is not None:
             return OperationStatus(409, "Device already registered.")
@@ -69,5 +72,17 @@ class MongoClient:
         await self.users_db.delete_one({"device_id": device_id, "fcm_key": fcm_key})
         await self.companions_db.delete_many({"$or": [{"partner_1": device_id}, {"partner_2": device_id}]})
         return OperationStatus(200, "Device deleted successfully.")
+
+    async def get_health(self, device_id: str) -> dict | None:
+        health_entry = await self.hrm_db.find_one({"device_id": device_id})
+        return health_entry
+
+    async def store_health(self, device_id: str, hrm: int, activity: str) -> None:
+        last_health = await self.get_health(device_id)
+
+        if last_health is None:
+            await self.hrm_db.insert_one({"device_id": device_id, "bpm": hrm, "activity": activity})
+        else:
+            await self.hrm_db.update_one({"device_id": device_id}, {"$set": {"bpm": hrm, "activity": activity}})
 
 client = MongoClient()

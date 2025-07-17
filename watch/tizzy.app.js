@@ -9,6 +9,7 @@ const STATES = {
 const PATHS = {
 	BASE: "https://tizzy.onrender.com",
 	TEMPO: "/tempo/w/notify",
+	HEALTH: "/tempo/w/pulse",
 };
 
 let drawTimeout;
@@ -215,6 +216,36 @@ function draw() {
 	queueDraw(drawDelay);
 }
 
+// Misc
+
+function shareHealth() {
+	let status = Bangle.getHealthStatus();
+
+	if (!userID || status.bpm == 0) {
+		Bangle.buzz(100).then(() => setTimeout(() => Bangle.buzz(100), 100));
+		return;
+	}
+
+	let payload = {
+		"bpm": status.bpm,
+		"activity": status.activity,
+		"sender_id": userID,
+	};
+
+	options = {
+		method: "post",
+		body: payload,
+		timeout: 52 * 1000, // 52 seconds
+		headers: {
+			"Content-Type": "application/json"
+		}
+	};
+
+	Bangle.http(PATHS.BASE + PATHS.TEMPO, options).then(data => {
+		Bangle.buzz(500);
+	});
+}
+
 //Bangle.on("drag", handleDrag);
 
 Bangle.on('touch', function (b, xy) {
@@ -232,6 +263,12 @@ Bangle.on("backlight", function (on) {
 		closeMenu();
 	}
 });
+
+Bangle.setHRMPower(true, "tizzy");
+
+// setInterval(() => {
+// 	shareHealth();
+// }, 30 * 1000);
 
 Bangle.loadWidgets();
 changeState(STATES.WATCH);
