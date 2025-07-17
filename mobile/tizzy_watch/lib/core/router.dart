@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tizzy_watch/core/auth.dart';
-import 'package:tizzy_watch/presentation/screens/home_screen.dart';
+import 'package:tizzy_watch/presentation/screens/stats_screen.dart';
 import 'package:tizzy_watch/presentation/screens/iseeyou_screen.dart';
 import 'package:tizzy_watch/presentation/screens/register_screen.dart';
 import 'package:tizzy_watch/presentation/screens/tempo_screen.dart';
@@ -26,13 +26,13 @@ final GoRouter router = GoRouter(
     return null;
   },
   routes: [
-    GoRoute(name: 'Home', path: '/', builder: (context, state) => HomeScreen()),
+    GoRoute(name: 'Home', path: '/', builder: (context, state) => TempoScreen()),
     GoRoute(name: 'Profile', path: '/profile', builder: (context, state) => ProfileScreen()),
     GoRoute(name: 'Register', path: '/register', builder: (context, state) => RegisterScreen()),
     GoRoute(
-      name: 'Tempo',
-      path: '/tempo',
-      builder: (context, state) => TempoScreen(),
+      name: 'Stats',
+      path: '/stats',
+      builder: (context, state) => StatsScreen(),
     ),
     GoRoute(
       name: 'ISeeYou',

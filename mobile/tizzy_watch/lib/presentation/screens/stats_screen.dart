@@ -3,19 +3,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tizzy_watch/core/client.dart';
 import 'package:tizzy_watch/presentation/widgets/app_bar.dart';
 import 'package:tizzy_watch/presentation/widgets/app_drawer.dart';
-import 'package:tizzy_watch/presentation/widgets/home/heart.dart';
-import 'package:tizzy_watch/presentation/widgets/home/presence_indicator.dart';
-import 'package:tizzy_watch/presentation/widgets/home/presence_indicator_info.dart';
-import 'package:tizzy_watch/presentation/widgets/home/watch_stats.dart';
+import 'package:tizzy_watch/presentation/widgets/stats/heart.dart';
+import 'package:tizzy_watch/presentation/widgets/stats/presence_indicator.dart';
+import 'package:tizzy_watch/presentation/widgets/stats/presence_indicator_info.dart';
+import 'package:tizzy_watch/presentation/widgets/stats/watch_stats.dart';
 
-class HomeScreen extends ConsumerWidget {
-  const HomeScreen({super.key});
+class StatsScreen extends ConsumerWidget {
+  const StatsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Client.promptServer();
     return Scaffold(
-      appBar: MyAppBar(title: "Home"),
+      appBar: MyAppBar(title: "Stats"),
       drawer: AppDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
