@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tizzy_watch/domain/timer.dart';
 import 'package:tizzy_watch/core/providers/timer_provider.dart';
+import 'package:home_widget/home_widget.dart';
 
 class TimerWidget extends ConsumerStatefulWidget {
   const TimerWidget({super.key, required this.timer});
@@ -11,6 +12,8 @@ class TimerWidget extends ConsumerStatefulWidget {
   @override
   ConsumerState<TimerWidget> createState() => _TimerWidgetState();
 }
+
+const String widgetName = "TimerWidget";
 
 class _TimerWidgetState extends ConsumerState<TimerWidget> {
   late Duration _durationLeft;
@@ -85,7 +88,7 @@ class _TimerWidgetState extends ConsumerState<TimerWidget> {
       margin: const EdgeInsets.all(8),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
-        onTap: () {}, // Can be used for showing details later
+        onTap: _updateHomeWidget,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -211,5 +214,14 @@ class _TimerWidgetState extends ConsumerState<TimerWidget> {
         ),
       ),
     );
+  }
+
+  void _updateHomeWidget() {
+    HomeWidget.saveWidgetData<String>('timer_title', widget.timer.title);
+    String duration = _formatDuration();
+    print(duration);
+    HomeWidget.saveWidgetData<String>('timer_duration', duration);
+
+    HomeWidget.updateWidget(androidName: widgetName);
   }
 }
