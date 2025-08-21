@@ -15,6 +15,7 @@ class Timers extends _$Timers {
 
   Future<void> addTimer(Timer timer) async {
     state = state.whenData((timers) => [...timers, timer]);
+    state.whenData((timers) => repository.saveTimers(timers));
   }
 
   Future<void> updateTimerCompletion(int timerID, bool completed) async {
