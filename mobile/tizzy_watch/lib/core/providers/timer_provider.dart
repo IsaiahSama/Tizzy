@@ -5,7 +5,7 @@ import 'package:tizzy_watch/domain/timer.dart';
 part 'timer_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-class TimerProvider extends _$TimerProvider {
+class Timers extends _$Timers {
   final repository = TimerRepositoryPref();
 
   @override

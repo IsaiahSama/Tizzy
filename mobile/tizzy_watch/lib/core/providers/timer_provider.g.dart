@@ -6,22 +6,19 @@ part of 'timer_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$timerProviderHash() => r'f275c2ffc498fff376940d99c732bf1e644e71bb';
+String _$timersHash() => r'890a9296069e9ef5e3e1dda9ce208867b6e779b5';
 
-/// See also [TimerProvider].
-@ProviderFor(TimerProvider)
-final timerProviderProvider =
-    AsyncNotifierProvider<TimerProvider, List<Timer>>.internal(
-      TimerProvider.new,
-      name: r'timerProviderProvider',
-      debugGetCreateSourceHash:
-          const bool.fromEnvironment('dart.vm.product')
-              ? null
-              : _$timerProviderHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+/// See also [Timers].
+@ProviderFor(Timers)
+final timersProvider = AsyncNotifierProvider<Timers, List<Timer>>.internal(
+  Timers.new,
+  name: r'timersProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$timersHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
-typedef _$TimerProvider = AsyncNotifier<List<Timer>>;
+typedef _$Timers = AsyncNotifier<List<Timer>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
