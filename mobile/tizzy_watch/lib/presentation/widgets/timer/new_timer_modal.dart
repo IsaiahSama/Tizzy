@@ -13,7 +13,7 @@ class NewTimerModal extends ConsumerStatefulWidget {
 class NewTimerModalState extends ConsumerState<NewTimerModal> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
-  DateTime? _selectedDate;
+  DateTime? _selectedDateTime;
 
   @override
   void dispose() {
@@ -49,22 +49,40 @@ class NewTimerModalState extends ConsumerState<NewTimerModal> {
                 builder: (context, setState) => Row(
                   children: [
                     Expanded(
-                      child: Text(_selectedDate == null 
-                        ? 'No date chosen'
-                        : 'End Date: ${_selectedDate!.toLocal().toString().split(' ')[0]}'),
+                      child: Text(_selectedDateTime == null
+                          ? 'No date & time chosen'
+                          : 'End: '
+                              '${_selectedDateTime!.toLocal().toString().substring(0, 16)}'),
                     ),
                     TextButton(
-                      onPressed: () => showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime.now().add(const Duration(days: 365 * 2)),
-                      ).then((picked) {
-                        if (picked != null) {
-                          setState(() => _selectedDate = picked);
+                      onPressed: () async {
+                        final date = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime.now().add(const Duration(days: 365 * 2)),
+                        );
+                        if (date != null && context.mounted) {
+                          final time = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+                          );
+                          if (time != null) {
+                            final combined = DateTime(
+                              date.year,
+                              date.month,
+                              date.day,
+                              time.hour,
+                              time.minute,
+                            );
+                            setState(() => _selectedDateTime = combined);
+                          } else {
+                            // If only date picked, still allow
+                            setState(() => _selectedDateTime = date);
+                          }
                         }
-                      }),
-                      child: const Text('Choose Date'),
+                      },
+                      child: const Text('Choose Date & Time'),
                     ),
                   ],
                 ),
@@ -80,19 +98,18 @@ class NewTimerModalState extends ConsumerState<NewTimerModal> {
                   const SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState!.validate() && _selectedDate != null) {
+                      if (_formKey.currentState!.validate() && _selectedDateTime != null) {
                         final newTimer = Timer(
                           id: DateTime.now().millisecondsSinceEpoch,
                           title: _titleController.text,
-                          enddate: _selectedDate!,
+                          enddate: _selectedDateTime!,
                           completed: false,
                         );
-                        
                         ref.read(timersProvider.notifier).addTimer(newTimer);
                         Navigator.of(context).pop();
-                      } else if (_selectedDate == null) {
+                      } else if (_selectedDateTime == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Please select an end date')),
+                          const SnackBar(content: Text('Please select a date and time')),
                         );
                       }
                     },

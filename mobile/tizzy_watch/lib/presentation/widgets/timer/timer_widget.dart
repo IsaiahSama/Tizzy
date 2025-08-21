@@ -64,14 +64,16 @@ class _TimerWidgetState extends ConsumerState<TimerWidget> {
   }
 
   String _formatDuration() {
-    if (_durationLeft == Duration.zero) {
+    if (_durationLeft <= Duration.zero) {
       return "Completed";
+    } else if (_durationLeft.inMinutes <= 1) {
+      return "less than 1 minute remains";
     } else if (_durationLeft.inMinutes <= 60) {
       return "${_durationLeft.inMinutes} minutes remain";
     } else if (_durationLeft.inHours <= 24) {
-      return "${_durationLeft.inHours} hours remain";
+      return "${_durationLeft.inHours} ${_durationLeft.inHours == 1 ? 'hour remains' : 'hours remain'}";
     } else {
-      return "${_durationLeft.inDays} days remain";
+      return "${_durationLeft.inDays} ${_durationLeft.inDays == 1 ? 'day remains' : 'days remain'}";
     }
   }
 
@@ -104,21 +106,27 @@ class _TimerWidgetState extends ConsumerState<TimerWidget> {
                   ),
                   const SizedBox(height: 16),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
-                      color: _durationLeft == Duration.zero
-                          ? Colors.green.withAlpha(25)
-                          : Colors.red.withAlpha(25),
+                      color:
+                          _durationLeft == Duration.zero
+                              ? Colors.green.withAlpha(25)
+                              : Colors.red.withAlpha(25),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       _formatDuration(),
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: _durationLeft == Duration.zero
-                            ? Colors.green.shade700
-                            : Colors.red.shade700,
+                        color:
+                            _durationLeft == Duration.zero
+                                ? Colors.green.shade700
+                                : Colors.red.shade700,
                       ),
                     ),
                   ),
@@ -129,7 +137,9 @@ class _TimerWidgetState extends ConsumerState<TimerWidget> {
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                    color: Theme.of(context).dividerColor.withAlpha(51), // 0.2 * 255 ≈ 51
+                    color: Theme.of(
+                      context,
+                    ).dividerColor.withAlpha(51), // 0.2 * 255 ≈ 51
                   ),
                 ),
               ),
@@ -139,7 +149,9 @@ class _TimerWidgetState extends ConsumerState<TimerWidget> {
                   Expanded(
                     child: InkWell(
                       onTap: () {
-                        ref.read(timersProvider.notifier).deleteTimer(widget.timer.id);
+                        ref
+                            .read(timersProvider.notifier)
+                            .deleteTimer(widget.timer.id);
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -167,7 +179,9 @@ class _TimerWidgetState extends ConsumerState<TimerWidget> {
                   Container(
                     width: 1,
                     height: 24,
-                    color: Theme.of(context).dividerColor.withAlpha(51), // 0.2 * 255 ≈ 51
+                    color: Theme.of(
+                      context,
+                    ).dividerColor.withAlpha(51), // 0.2 * 255 ≈ 51
                   ),
                   Expanded(
                     child: InkWell(
@@ -179,16 +193,11 @@ class _TimerWidgetState extends ConsumerState<TimerWidget> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.share_outlined,
-                              size: 20,
-                            ),
+                            Icon(Icons.share_outlined, size: 20),
                             SizedBox(width: 8),
                             Text(
                               'Share',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
+                              style: TextStyle(fontWeight: FontWeight.w500),
                             ),
                           ],
                         ),

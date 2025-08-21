@@ -28,25 +28,33 @@ class TimerScreen extends ConsumerWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: timers.when(
-          data: (timers) => Column(
-            children: [
-              Expanded(
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
+          data: (timers) {
+            if (timers.isEmpty) {
+              return const Center(child: Text("No timers available"));
+            }
+            return Column(
+              children: [
+                Expanded(
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                    itemCount: timers.length,
+                    itemBuilder: (context, index) {
+                      return TimerWidget(timer: timers[index]);
+                    },
                   ),
-                  itemCount: timers.length,
-                  itemBuilder: (context, index) {
-                    return TimerWidget(timer: timers[index]);
-                  },
                 ),
-              ),
-            ],
-          ),
+              ],
+            );
+          },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stack) => Center(child: Text('Error: \\${error.toString()}')),
+          error:
+              (error, stack) =>
+                  Center(child: Text('Error: \\${error.toString()}')),
         ),
       ),
     );
