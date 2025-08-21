@@ -1,27 +1,43 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_container"
-    style="@style/Widget.Android.AppWidget.Container"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@android:color/white"
-    android:theme="@style/Theme.Android.AppWidgetContainer">
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal">
 
     <TextView
         android:id="@+id/timer_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
         android:text="No Title"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#222222"
+        android:gravity="center"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_marginBottom="12dp" />
 
-    <TextView
-        android:id="@+id/timer_duration"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/timer_title"
-        android:layout_marginTop="8dp"
-        android:text="0 days left" />
-</RelativeLayout>
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@drawable/timer_duration_pill"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp">
+
+        <TextView
+            android:id="@+id/timer_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 days left"
+            android:textSize="14sp"
+            android:textColor="#388E3C"
+            android:gravity="center" />
+    </LinearLayout>
+</LinearLayout>
