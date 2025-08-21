@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tizzy_watch/core/providers/timer_provider.dart';
+import 'package:tizzy_watch/core/providers/countdown_provider.dart';
 import 'package:tizzy_watch/presentation/widgets/app_bar.dart';
 import 'package:tizzy_watch/presentation/widgets/app_drawer.dart';
-import 'package:tizzy_watch/presentation/widgets/timer/timer_widget.dart';
-import 'package:tizzy_watch/presentation/widgets/timer/new_timer_modal.dart';
+import 'package:tizzy_watch/presentation/widgets/countdown/countdown_widget.dart';
+import 'package:tizzy_watch/presentation/widgets/countdown/new_countdown_modal.dart';
 
-class TimerScreen extends ConsumerWidget {
-  const TimerScreen({super.key});
+class CountdownScreen extends ConsumerWidget {
+  const CountdownScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timers = ref.watch(timersProvider);
+    final countdowns = ref.watch(countdownsProvider);
 
     return Scaffold(
       appBar: MyAppBar(title: "Love Timers"),
@@ -20,17 +20,17 @@ class TimerScreen extends ConsumerWidget {
         onPressed: () {
           showDialog(
             context: context,
-            builder: (context) => const NewTimerModal(),
+            builder: (context) => const NewCountdownModal(),
           );
         },
         child: const Icon(Icons.add),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: timers.when(
-          data: (timers) {
-            if (timers.isEmpty) {
-              return const Center(child: Text("No timers available"));
+        child: countdowns.when(
+          data: (countdowns) {
+            if (countdowns.isEmpty) {
+              return const Center(child: Text("No countdowns available"));
             }
             return Column(
               children: [
@@ -42,9 +42,9 @@ class TimerScreen extends ConsumerWidget {
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 10,
                         ),
-                    itemCount: timers.length,
+                    itemCount: countdowns.length,
                     itemBuilder: (context, index) {
-                      return TimerWidget(timer: timers[index]);
+                      return CountdownWidget(countdown: countdowns[index]);
                     },
                   ),
                 ),

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tizzy_watch/core/providers/timer_provider.dart';
-import 'package:tizzy_watch/domain/timer.dart';
+import 'package:tizzy_watch/core/providers/countdown_provider.dart';
+import 'package:tizzy_watch/domain/countdown.dart';
 
-class NewTimerModal extends ConsumerStatefulWidget {
-  const NewTimerModal({super.key});
+class NewCountdownModal extends ConsumerStatefulWidget {
+  const NewCountdownModal({super.key});
 
   @override
-  NewTimerModalState createState() => NewTimerModalState();
+  NewCountdownModalState createState() => NewCountdownModalState();
 }
 
-class NewTimerModalState extends ConsumerState<NewTimerModal> {
+class NewCountdownModalState extends ConsumerState<NewCountdownModal> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   DateTime? _selectedDateTime;
@@ -34,7 +34,7 @@ class NewTimerModalState extends ConsumerState<NewTimerModal> {
               TextFormField(
                 controller: _titleController,
                 decoration: const InputDecoration(
-                  labelText: 'Timer Title',
+                  labelText: 'Countdown Title',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
@@ -99,13 +99,13 @@ class NewTimerModalState extends ConsumerState<NewTimerModal> {
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate() && _selectedDateTime != null) {
-                        final newTimer = Timer(
+                        final newCountdown = Countdown(
                           id: DateTime.now().millisecondsSinceEpoch,
                           title: _titleController.text,
                           enddate: _selectedDateTime!,
                           completed: false,
                         );
-                        ref.read(timersProvider.notifier).addTimer(newTimer);
+                        ref.read(countdownsProvider.notifier).addCountdown(newCountdown);
                         Navigator.of(context).pop();
                       } else if (_selectedDateTime == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -113,7 +113,7 @@ class NewTimerModalState extends ConsumerState<NewTimerModal> {
                         );
                       }
                     },
-                    child: const Text('Create Timer'),
+                    child: const Text('Create Countdown'),
                   ),
                 ],
               ),

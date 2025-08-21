@@ -1,18 +1,18 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tizzy_watch/domain/timer.dart';
+import 'package:tizzy_watch/domain/countdown.dart';
 
-abstract class TimerRepository {
-  Future<List<Timer>> getAllTimers();
-  Future<void> saveTimers(List<Timer> timers);
+abstract class CountdownRepository {
+  Future<List<Countdown>> getAllCountdowns();
+  Future<void> saveCountdowns(List<Countdown> timers);
 }
 
-class TimerRepositoryPref implements TimerRepository {
+class CountdownRepositoryPref implements CountdownRepository {
 
   static const String _storageKey = 'timers';
   
   @override
-  Future<List<Timer>> getAllTimers() async {
+  Future<List<Countdown>> getAllCountdowns() async {
     final prefs = await SharedPreferences.getInstance();
     final jsonString = prefs.getString(_storageKey);
 
@@ -21,11 +21,11 @@ class TimerRepositoryPref implements TimerRepository {
     if (jsonString == null) return [];
     
     final List<dynamic> jsonList = json.decode(jsonString);
-    return jsonList.map((jsonItem) => Timer.fromJson(jsonItem)).toList();
+    return jsonList.map((jsonItem) => Countdown.fromJson(jsonItem)).toList();
   }
   
   @override
-  Future<void> saveTimers(List<Timer> timers) async {
+  Future<void> saveCountdowns(List<Countdown> timers) async {
     final prefs = await SharedPreferences.getInstance();
     final jsonList = timers.map((timer) => timer.toJson()).toList();
     await prefs.setString(_storageKey, json.encode(jsonList));

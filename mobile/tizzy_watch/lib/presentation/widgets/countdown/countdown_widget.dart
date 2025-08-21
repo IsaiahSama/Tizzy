@@ -1,23 +1,23 @@
 import 'dart:async' as d;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tizzy_watch/domain/timer.dart';
-import 'package:tizzy_watch/core/providers/timer_provider.dart';
+import 'package:tizzy_watch/domain/countdown.dart';
+import 'package:tizzy_watch/core/providers/countdown_provider.dart';
 import 'package:home_widget/home_widget.dart';
 
-class TimerWidget extends ConsumerStatefulWidget {
-  const TimerWidget({super.key, required this.timer});
-  final Timer timer;
+class CountdownWidget extends ConsumerStatefulWidget {
+  const CountdownWidget({super.key, required this.countdown});
+  final Countdown countdown;
 
   @override
-  ConsumerState<TimerWidget> createState() => _TimerWidgetState();
+  ConsumerState<CountdownWidget> createState() => _CountdownWidgetState();
 }
 
-const String widgetName = "TimerWidget";
+const String widgetName = "CountdownWidget";
 
-class _TimerWidgetState extends ConsumerState<TimerWidget> {
+class _CountdownWidgetState extends ConsumerState<CountdownWidget> {
   late Duration _durationLeft;
-  d.Timer? _updateTimer;
+  d.Timer? _updateCountdown;
   bool completed = false;
 
   @override
@@ -25,34 +25,34 @@ class _TimerWidgetState extends ConsumerState<TimerWidget> {
     super.initState();
     _updateDuration();
 
-    // Set timer update frequency based on remaining duration
-    _setUpdateTimer();
+    // Set countdown update frequency based on remaining duration
+    _setUpdateCountdown();
   }
 
   void _updateDuration() {
     final now = DateTime.now();
-    if (widget.timer.enddate.isAfter(now)) {
-      _durationLeft = widget.timer.enddate.difference(now);
+    if (widget.countdown.enddate.isAfter(now)) {
+      _durationLeft = widget.countdown.enddate.difference(now);
     } else {
       _durationLeft = Duration.zero;
       completed = true;
-      _updateTimer?.cancel();
+      _updateCountdown?.cancel();
     }
   }
 
-  void _setUpdateTimer() {
-    _updateTimer?.cancel();
+  void _setUpdateCountdown() {
+    _updateCountdown?.cancel();
 
     if (_durationLeft.inMinutes <= 60) {
       // Update every minute if within 60 minutes
-      _updateTimer = d.Timer.periodic(const Duration(minutes: 1), (_) {
+      _updateCountdown = d.Timer.periodic(const Duration(minutes: 1), (_) {
         setState(() {
           _updateDuration();
         });
       });
     } else if (_durationLeft.inHours <= 24) {
       // Update every hour if within 24 hours
-      _updateTimer = d.Timer.periodic(const Duration(hours: 1), (_) {
+      _updateCountdown = d.Timer.periodic(const Duration(hours: 1), (_) {
         setState(() {
           _updateDuration();
         });
@@ -62,7 +62,7 @@ class _TimerWidgetState extends ConsumerState<TimerWidget> {
 
   @override
   void dispose() {
-    _updateTimer?.cancel();
+    _updateCountdown?.cancel();
     super.dispose();
   }
 
@@ -97,7 +97,7 @@ class _TimerWidgetState extends ConsumerState<TimerWidget> {
               child: Column(
                 children: [
                   Text(
-                    widget.timer.title,
+                    widget.countdown.title,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -153,8 +153,8 @@ class _TimerWidgetState extends ConsumerState<TimerWidget> {
                     child: InkWell(
                       onTap: () {
                         ref
-                            .read(timersProvider.notifier)
-                            .deleteTimer(widget.timer.id);
+                            .read(countdownsProvider.notifier)
+                            .deleteCountdown(widget.countdown.id);
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -217,10 +217,10 @@ class _TimerWidgetState extends ConsumerState<TimerWidget> {
   }
 
   void _updateHomeWidget() {
-    HomeWidget.saveWidgetData<String>('timer_title', widget.timer.title);
+    HomeWidget.saveWidgetData<String>('countdown_title', widget.countdown.title);
     String duration = _formatDuration();
     print(duration);
-    HomeWidget.saveWidgetData<String>('timer_duration', duration);
+    HomeWidget.saveWidgetData<String>('countdown_duration', duration);
 
     HomeWidget.updateWidget(androidName: widgetName);
   }

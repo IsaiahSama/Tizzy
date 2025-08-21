@@ -27,9 +27,9 @@ class AppDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            title: Text('Timers'),
+            title: Text('Countdowns'),
             onTap: () {
-              context.goNamed('Timers');
+              context.goNamed('Countdowns');
             },
           ),
           ListTile(
