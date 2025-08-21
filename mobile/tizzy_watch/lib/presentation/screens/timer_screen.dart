@@ -4,7 +4,7 @@ import 'package:tizzy_watch/core/providers/timer_provider.dart';
 import 'package:tizzy_watch/presentation/widgets/app_bar.dart';
 import 'package:tizzy_watch/presentation/widgets/app_drawer.dart';
 import 'package:tizzy_watch/presentation/widgets/timer/timer_widget.dart';
-import 'package:tizzy_watch/presentation/widgets/timer/new_timer_widget.dart';
+import 'package:tizzy_watch/presentation/widgets/timer/new_timer_modal.dart';
 
 class TimerScreen extends ConsumerWidget {
   const TimerScreen({super.key});
