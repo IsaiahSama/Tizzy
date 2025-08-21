@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tizzy_watch/core/constants.dart';
 
 final dioProvider = Provider<Dio>(
-  (ref) => Dio(BaseOptions(baseUrl: serverURL)),
+  (ref) => Dio(BaseOptions(baseUrl: serverURL, validateStatus: (status) => status != null && status < 500)),
 );
 
-final dio = Dio(BaseOptions(baseUrl: serverURL));
+final dio = Dio(BaseOptions(baseUrl: serverURL, validateStatus: (status) => status != null && status < 500));
 
 class Client {
   static Dio getDio(WidgetRef ref) {
@@ -35,10 +35,9 @@ class Client {
       }
     }
 
-
     String? reason = response?.data?['message'].toString();
 
-    if (context != null && context.mounted) {
+    if (context != null && context.mounted && response != null) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(reason ?? 'Sent Successfully!')));

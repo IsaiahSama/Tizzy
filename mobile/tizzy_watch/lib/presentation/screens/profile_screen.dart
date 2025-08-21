@@ -22,7 +22,7 @@ class ProfileScreen extends ConsumerWidget {
               children: [
                 Row(
                   children: [
-                    SelectableText("Device ID: ${snapshot.data!}"),
+                    SelectableText("Your ID: ${snapshot.data!}"),
                     IconButton(
                       icon: const Icon(Icons.copy),
                       onPressed: () {
