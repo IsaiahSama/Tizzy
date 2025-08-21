@@ -24,7 +24,6 @@ Tizzy will have the following screens and their corresponding routes.
 
 - Home: /
 - Tempo: /tempo
-- ISeeYou: /iseeyou
 - TizzChat: /tizzchat
 
 These will represent the routes that will display each of their related screens.

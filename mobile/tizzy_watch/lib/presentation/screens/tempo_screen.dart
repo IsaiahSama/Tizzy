@@ -5,7 +5,7 @@ import 'package:tizzy_watch/core/client.dart';
 import 'package:tizzy_watch/core/constants.dart';
 import 'package:tizzy_watch/presentation/widgets/app_bar.dart';
 import 'package:tizzy_watch/presentation/widgets/app_drawer.dart';
-import 'package:tizzy_watch/domain/entities/tempo_message.dart';
+import 'package:tizzy_watch/domain/tempo_message.dart';
 import 'package:tizzy_watch/presentation/widgets/tempo/tempo_message_widget.dart';
 import "package:tizzy_watch/core/auth.dart";
 

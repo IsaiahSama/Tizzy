@@ -1,5 +1,5 @@
 import "package:riverpod_annotation/riverpod_annotation.dart";
-import "package:tizzy_watch/domain/entities/tempo_message.dart";
+import "package:tizzy_watch/domain/tempo_message.dart";
 
 part 'messages_provider.g.dart';
 

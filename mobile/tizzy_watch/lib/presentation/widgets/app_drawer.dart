@@ -11,19 +11,25 @@ class AppDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.deepPurple,
-            ),
+            decoration: BoxDecoration(color: Colors.deepPurple),
             child: Padding(
               padding: EdgeInsets.only(top: 10.0),
-              child: Text('Tizzy Apps',
-                  style: TextStyle(color: Colors.white, fontSize: 34)),
+              child: Text(
+                'Tizzy Apps',
+                style: TextStyle(color: Colors.white, fontSize: 34),
+              ),
             ),
           ),
           ListTile(
             title: const Text('Tempo'),
             onTap: () {
               context.goNamed('Home');
+            },
+          ),
+          ListTile(
+            title: Text('Timers'),
+            onTap: () {
+              context.goNamed('Timers');
             },
           ),
           ListTile(
@@ -42,12 +48,6 @@ class AppDrawer extends StatelessWidget {
             title: Text('Stats'),
             onTap: () {
               context.goNamed('Stats');
-            },
-          ),
-          ListTile(
-            title: Text('ISeeYou'),
-            onTap: () {
-              context.goNamed('ISeeYou');
             },
           ),
         ],

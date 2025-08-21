@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tizzy_watch/application/gadget_bridge_service.dart';
 import 'package:tizzy_watch/core/providers/messages_provider.dart';
 import "package:tizzy_watch/core/router.dart";
-import 'package:tizzy_watch/domain/entities/tempo_message.dart';
+import 'package:tizzy_watch/domain/tempo_message.dart';
 
 class MainApp extends ConsumerStatefulWidget {
   const MainApp({super.key});

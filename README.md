@@ -43,13 +43,6 @@ Messages will include:
 - Call?
 - I want you 🥴🥴
 
-### ISeeYou
-
-ISeeYou will provide several monitoring features for the partner such as:
-
-- Location Tracking
-- Heart Rate Monitoring
-
 ## Server
 There will also be a server written using FastAPI to facilitate the watches communicating with each other, and accessing data from the other.
 The server will provide services that can be used by each of the watches' applications.

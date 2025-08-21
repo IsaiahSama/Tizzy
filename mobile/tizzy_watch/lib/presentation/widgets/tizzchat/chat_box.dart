@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tizzy_watch/core/providers/messages_provider.dart';
-import 'package:tizzy_watch/domain/entities/tempo_message.dart';
+import 'package:tizzy_watch/domain/tempo_message.dart';
 
 class ChatBox extends ConsumerStatefulWidget {
   const ChatBox({super.key});

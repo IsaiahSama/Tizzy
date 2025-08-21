@@ -4,7 +4,7 @@ import "package:tizzy_watch/core/auth.dart";
 import "package:tizzy_watch/core/client.dart";
 import "package:tizzy_watch/core/constants.dart";
 import "package:tizzy_watch/core/providers/messages_provider.dart";
-import "package:tizzy_watch/domain/entities/tempo_message.dart";
+import "package:tizzy_watch/domain/tempo_message.dart";
 
 class TempoMessageWidget extends ConsumerWidget {
   final TempoMessage message;
