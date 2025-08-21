@@ -54,6 +54,18 @@ static Future<void> sendTempoMesssage(TempoMessage) async {}
 
 This method accepts a custom defined TempoMessage object, which it will the turn into an appropriately formatted `Map<String, dynamic>`, then call `sendToBangle` with the correct function name, and formatted data arguments.
 
+## Countdown
+
+The Tizzy mobile app features a Countdown functionality, allowing you to create, view, and manage countdowns for important events or shared moments.
+
+- **Create Timers:** Add a countdown by specifying a title and an end date/time. Countdowns are displayed in a visually appealing grid, each showing the remaining time.
+- **Sync with Your Partner:** When you create or update a countdown, it can be shared with your paired partner's device, ensuring both of you stay on track for shared goals or events.
+- **Real-Time Updates:** Timer changes are reflected in real time, and you can delete or share countdowns as needed.
+
+This feature is perfect for couples or friends who want to coordinate reminders, countdowns, or special dates together.
+
+You can also add the timer as a widget to your home screen, for ease of checking. Only one at a time though (limitation on my part for not knowing widgets better). You can update the timer being shown on your home screen widget by choosing one in the Countdowns menu in the app.
+
 ## Notifications
 
 This app will support receiving messages from Firebase messaging. This will be used for when sending information from one partner to the next. Notifcations will be used to trigger data sharing from the phone to the watch, for example, when calling Tempo.

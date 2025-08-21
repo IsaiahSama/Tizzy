@@ -9,7 +9,7 @@ class MessagingService:
         notification = messaging.Notification(
             title="Tizzy: " + payload.get("title", "!"),
             body=payload.get("body", None) or payload.get("message", None) or "You've been Tizzed!",
-            image="https://raw.githubusercontent.com/IsaiahSama/LoveWatch/refs/heads/main/assets/tizzy_logo.png?token=GHSAT0AAAAAAC5SJ6WDN6GSUMW2EFK3IHJ22B4XEYQ"
+            image="https://i.imgur.com/w3L9zVh.png"
         )
         
         android = messaging.AndroidConfig(
