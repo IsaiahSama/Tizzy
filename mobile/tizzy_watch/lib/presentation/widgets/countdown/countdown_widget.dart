@@ -110,7 +110,7 @@ class _CountdownWidgetState extends ConsumerState<CountdownWidget> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 32),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 8,
@@ -209,6 +209,10 @@ class _CountdownWidgetState extends ConsumerState<CountdownWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            ListTile(
+              leading: const Icon(Icons.calendar_month),
+              title: Text(widget.countdown.enddate.toString()),
+            ),
             ListTile(
               leading: const Icon(Icons.share_outlined),
               title: const Text('Share with partner'),
