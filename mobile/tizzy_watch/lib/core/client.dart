@@ -31,7 +31,7 @@ class Client {
       if (context != null && context.mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('Failed to make request!')));
+        ).showSnackBar(const SnackBar(content: Text('Failed to make request! Server may not be available.')));
       }
     }
 

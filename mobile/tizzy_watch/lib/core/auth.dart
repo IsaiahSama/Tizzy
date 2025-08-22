@@ -29,9 +29,10 @@ class AuthService {
 
     final response = await Client.makePostRequest(registerURL, {"device_id": deviceID, "fcm_key": fcmToken}, context);
 
-    if (response != null && response.statusCode != 200) {
-      throw Exception("Failed to register user. Status code: ${response.statusCode}");
+    if (response != null && response.statusCode != 200 || response == null) {
+      throw Exception("Failed to register user. ${response?.data['message'] ?? 'Server is down.'}");
     }
+    
     await asyncPrefs.setString(deviceIDKey, deviceID);
     await asyncPrefs.setString(fcmTokenKey, fcmToken);
     await asyncPrefs.setString(genderKey, gender);
@@ -46,9 +47,10 @@ class AuthService {
 
     final response = await Client.makePostRequest(companionURL,{"device_id": deviceID, "fcm_key": fcmToken, "companion_id": companionID}, context);
 
-    if (response != null && response.statusCode != 200) {
-      throw Exception("Failed to set companion. Status code: ${response.statusCode}");
+    if (response != null && response.statusCode != 200 || response == null) {
+      throw Exception("Failed to set companion. ${response?.data['message'] ?? 'Server is down.'}");
     }
+
     await asyncPrefs.setString(companionIDKey, companionID);
   }
 
