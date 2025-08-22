@@ -11,6 +11,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   String companionID = '';
+  bool isProcessing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -38,19 +39,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Expanded(
                       child: SizedBox(
                         width: 350,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Enter Companion ID',
-                              ),
-                              onChanged: (text) {
-                                setState(() {
-                                  companionID = text;
-                                });
-                              },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Enter Companion ID',
                             ),
+                            onChanged: (text) {
+                              setState(() {
+                                companionID = text;
+                              });
+                            },
+                          ),
                         ),
                       ),
                     ),
@@ -66,9 +67,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
-                      onPressed: () async {
-                        await _registerUser("boy", context);
-                      },
+                      onPressed:
+                          isProcessing
+                              ? null
+                              : () async {
+                                setState(() {
+                                  isProcessing = true;
+                                });
+                                await _registerUser("boy", context);
+                              },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
                       ),
@@ -81,9 +88,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
-                      onPressed: () async {
-                        await _registerUser("girl", context);
-                      },
+                      onPressed:
+                          isProcessing
+                              ? null
+                              : () async {
+                                setState(() {
+                                  isProcessing = true;
+                                });
+                                await _registerUser("girl", context);
+                              },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.pink,
                       ),
@@ -103,12 +116,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _registerUser(String gender, BuildContext context) async {
-    await AuthService.registerUser(gender, context);
-    if (companionID.isNotEmpty) {
-      await AuthService.setCompanion(companionID, context);
-    }
-    if (mounted) {
-      context.go('/');
+    try {
+      await AuthService.registerUser(gender, context);
+      if (companionID.isNotEmpty) {
+        await AuthService.setCompanion(companionID, context);
+      }
+      if (mounted) {
+        context.go('/');
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          isProcessing = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Registration failed: ${e.toString()}')),
+        );
+      }
     }
   }
 }
