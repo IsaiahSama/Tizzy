@@ -1,6 +1,9 @@
 import 'dart:async' as d;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tizzy_watch/core/client.dart';
+import 'package:tizzy_watch/core/constants.dart';
 import 'package:tizzy_watch/domain/countdown.dart';
 import 'package:tizzy_watch/core/providers/countdown_provider.dart';
 import 'package:home_widget/home_widget.dart';
@@ -88,7 +91,7 @@ class _CountdownWidgetState extends ConsumerState<CountdownWidget> {
       margin: const EdgeInsets.all(8),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
-        onTap: _updateHomeWidget,
+        onTap: () => _showOptionsModal(context),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -186,27 +189,6 @@ class _CountdownWidgetState extends ConsumerState<CountdownWidget> {
                       context,
                     ).dividerColor.withAlpha(51), // 0.2 * 255 ≈ 51
                   ),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        // Share functionality to be implemented
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.share_outlined, size: 20),
-                            SizedBox(width: 8),
-                            Text(
-                              'Share',
-                              style: TextStyle(fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -216,12 +198,56 @@ class _CountdownWidgetState extends ConsumerState<CountdownWidget> {
     );
   }
 
+  void _showOptionsModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.share_outlined),
+              title: const Text('Share with partner'),
+              onTap: () {
+                Navigator.pop(context);
+                _shareWithPartner();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.home_outlined),
+              title: const Text('Set to Home Widget'),
+              onTap: () {
+                Navigator.pop(context);
+                _updateHomeWidget();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _shareWithPartner() async {
+    final SharedPreferencesAsync asyncPrefs = SharedPreferencesAsync();
+    final String? deviceID = await asyncPrefs.getString(deviceIDKey);
+
+    await Client.makePostRequest(countdownURL, {
+      "sender_id": deviceID,
+      "countdown_id": widget.countdown.id,
+      "title": widget.countdown.title,
+      "end_date": widget.countdown.enddate.toString(),
+      "completed": widget.countdown.completed
+    }, context.mounted == true ? context : null);
+  }
+
   void _updateHomeWidget() {
     HomeWidget.saveWidgetData<String>('countdown_title', widget.countdown.title);
     String duration = _formatDuration();
-    print(duration);
     HomeWidget.saveWidgetData<String>('countdown_duration', duration);
-
     HomeWidget.updateWidget(androidName: widgetName);
   }
 }

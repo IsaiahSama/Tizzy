@@ -3,8 +3,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tizzy_watch/application/gadget_bridge_service.dart';
+import 'package:tizzy_watch/core/providers/countdown_provider.dart';
 import 'package:tizzy_watch/core/providers/messages_provider.dart';
 import "package:tizzy_watch/core/router.dart";
+import 'package:tizzy_watch/domain/countdown.dart';
 import 'package:tizzy_watch/domain/tempo_message.dart';
 
 class MainApp extends ConsumerStatefulWidget {
@@ -63,6 +65,17 @@ void _handleMessage(RemoteMessage message, WidgetRef? ref) {
     );
     ref?.read(messagesProvider.notifier).addMessage(
       TempoMessage(message: message.data['message']),
+    );
+  }
+  if (message.data['type'] == 'countdown') {
+
+    ref?.read(countdownsProvider.notifier).addCountdown(
+      Countdown.fromJson({
+        'id': int.parse(message.data['countdown_id']),
+        'title': message.data['title'],
+        'enddate': message.data['end_date'],
+        'completed': message.data['completed'] == 'true' ? true : false,
+      }),
     );
   }
 }

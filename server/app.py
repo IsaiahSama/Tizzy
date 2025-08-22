@@ -5,18 +5,18 @@ from pydantic import BaseModel
 
 
 try:
-    from server.routes import tempo
+    from server.routes import tempo, share
     from server.utils.mongo_db import client
     from server.utils.operation_status import OperationStatus
 except ImportError:
-    from routes import tempo
+    from routes import tempo, share
     from utils.mongo_db import client
     from utils.operation_status import OperationStatus
 
 app = FastAPI()
 
 app.include_router(tempo.router)
-
+app.include_router(share.router)
 
 @app.get("/")
 async def root():

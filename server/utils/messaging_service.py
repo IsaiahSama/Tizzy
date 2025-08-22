@@ -5,7 +5,7 @@ from firebase_admin import messaging
 class MessagingService:
     
     @staticmethod
-    def notify_user(token: str, payload: dict):
+    def notify_user(receiver_token: str, payload: dict):
         notification = messaging.Notification(
             title="Tizzy: " + payload.get("title", "!"),
             body=payload.get("body", None) or payload.get("message", None) or "You've been Tizzed!",
@@ -20,7 +20,10 @@ class MessagingService:
             data=payload,
             notification=notification,
             android=android,
-            token=token,
+            token=receiver_token,
         )
-
-        _ = messaging.send(message)
+        
+        try:
+            _ = messaging.send(message)
+        except Exception as e:
+            print(f"Error sending message: {e}")

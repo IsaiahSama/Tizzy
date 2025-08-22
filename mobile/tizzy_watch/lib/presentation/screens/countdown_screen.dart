@@ -34,6 +34,7 @@ class CountdownScreen extends ConsumerWidget {
             }
             return Column(
               children: [
+                const Text("Tap a countdown to share with your partner"),
                 Expanded(
                   child: GridView.builder(
                     gridDelegate:

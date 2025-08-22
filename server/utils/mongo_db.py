@@ -85,4 +85,24 @@ class MongoClient:
         else:
             await self.hrm_db.update_one({"device_id": device_id}, {"$set": {"bpm": hrm, "activity": activity}})
 
+    async def get_user_and_companion(self, sender_id: str) -> tuple[dict, dict | None]:
+        user = await self.users_db.find_one({"device_id": sender_id})
+        if user is None:
+            return {"message": "Sender not found."}, None
+
+        companion_entry = await self.companions_db.find_one(
+            {"$or": [{"partner_1": sender_id}, {"partner_2": sender_id}]}
+        )
+        if companion_entry is None:
+            return {"message": "No companion found."}, None
+
+        companion_id = (
+            companion_entry["partner_1"]
+            if companion_entry["partner_2"] == sender_id
+            else companion_entry["partner_2"]
+        )
+        
+        companion = await client.users_db.find_one({"device_id": companion_id})
+        return user, companion
+
 client = MongoClient()

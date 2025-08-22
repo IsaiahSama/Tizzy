@@ -19,30 +19,10 @@ class TempoMessage(BaseModel):
     sender_id: str
     message: str
     color: str | None
-    
-async def get_user_and_companion(sender_id: str) -> tuple[dict, dict | None]:
-    user = await client.users_db.find_one({"device_id": sender_id})
-    if user is None:
-        return {"message": "Sender not found."}, None
-
-    companion_entry = await client.companions_db.find_one(
-        {"$or": [{"partner_1": sender_id}, {"partner_2": sender_id}]}
-    )
-    if companion_entry is None:
-        return {"message": "No companion found."}, None
-
-    companion_id = (
-        companion_entry["partner_1"]
-        if companion_entry["partner_2"] == sender_id
-        else companion_entry["partner_2"]
-    )
-    
-    companion = await client.users_db.find_one({"device_id": companion_id})
-    return user, companion
 
 @router.post("/notify")
 async def notify(data: Annotated[TempoMessage, Form()]):
-    sender_or_error, companion = await get_user_and_companion(data.sender_id)
+    sender_or_error, companion = await client.get_user_and_companion(data.sender_id)
     
     if not companion:
         error = sender_or_error
@@ -83,7 +63,7 @@ class CompanionPulse(BaseModel):
 
 @router.post("/pulse")
 async def pulse(data: Annotated[CompanionPulse, Form()]):
-    sender_or_error, companion = await get_user_and_companion(data.sender_id)
+    sender_or_error, companion = await client.get_user_and_companion(data.sender_id)
     
     if not companion:
         error = sender_or_error
@@ -112,7 +92,7 @@ async def pulse_json(body = Body(None)):
     
 @router.get("/pulse/{device_id}")
 async def get_companion_pulse(device_id: str):
-    sender_or_error, companion = await get_user_and_companion(device_id)
+    sender_or_error, companion = await client.get_user_and_companion(device_id)
 
     if not companion:
         error = sender_or_error
